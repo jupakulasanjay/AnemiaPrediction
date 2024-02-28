@@ -130,14 +130,26 @@
             padding-left: 10%;
             width: 50%;
             font-family: Georgia, serif;
-            margin-top: 20%;
+            font-size: 70px;
+            margin-top: 15%;
+            color: white;
+        }
+
+        .home-image1 {
+            font-size: 50px;
+            padding-left: 15%;
+            width: 50%;
+            font-family: Georgia, serif;
+            margin-top: 10%;
+            display: flex;
         }
 
         .home-content {
             font-size: 30px;
-            width: 50%;
+            width: 40%;
             font-family: Verdana, sans-serif;
             padding-left: 10%;
+            color: white;
         }
 
         .form-container {
@@ -150,6 +162,82 @@
             transition: transform 0.5s ease;
             transform: translateX(100%);
         }
+
+        .home-image1-content-container {
+            font-size: 50px;
+            font-family: Verdana, sans-serif;
+        }
+
+        .home-image1-content-heading {
+            font-size: 50px;
+            padding-left: 80%;
+            font-family: Verdana, sans-serif;
+            margin-top: 50px;
+            color: #aa4949;
+        }
+
+        .home-image1-content-body {
+            font-size: 25px;
+            margin-left: 55%;
+            padding-left: 20px;
+            color: #682d2d;
+            padding-top: 10px;
+            font-family: Verdana, sans-serif;
+            width: 500px;
+            margin-top: 10px;
+            background: #ffbfbf3b;
+            padding-bottom: 10px;
+            border-radius: 20PX;
+        }
+
+        .case-content {
+            font-size: 60px;
+            width: 40%;
+            font-family: Verdana, sans-serif;
+            padding-left: 35%;
+            color: #aa4949;
+            margin-top: 8%;
+        }
+
+        .cases-container {
+            margin-left: 10%;
+            margin-right: 10%;
+            display: flex;
+            margin-top: 5%;
+        }
+
+        .case-box1 {
+            box-shadow: 0 -2px 9px 0 rgb(238 73 73 / 71%), 0 0px;
+        }
+
+        .case-box2 {
+            box-shadow: 0 -2px 9px 0 rgb(238 73 73 / 71%), 0 0px;
+            margin-left: 15%;
+        }
+
+        .cases-iamge {
+            width: 300px;
+            height: 200px;
+        }
+
+        .case-content-heading {
+            padding: 20px;
+            font-size: 25px;
+        }
+
+        .case-content-body {
+            width: 260px;
+            padding-left: 15px;
+            text-align: justify;
+            font-size: 20px;
+        }
+
+        .home-footer {
+            height: 66px;
+            margin-top: 100px;
+            background: #c12b2b;
+        }
+
 
         .form {
             background-color: #ffffffaf;
@@ -428,44 +516,67 @@
                 less than normal
             </div>
 
-            <div class="home-heading">
-                ANEMIA
-            </div>
-            <div class="home-content">
-                A very common medical condition in which the red blood cell count or the hemoglobin in the blood is
-                less than normal
-            </div>
-
-            <div class="home-heading">
-                ANEMIA
-            </div>
-            <div class="home-content">
-                A very common medical condition in which the red blood cell count or the hemoglobin in the blood is
-                less than normal
-            </div>
-            <div class="home-heading">
-                ANEMIA
-            </div>
-            <div class="home-content">
-                A very common medical condition in which the red blood cell count or the hemoglobin in the blood is
-                less than normal
+            <div class="home-image1">
+                <img id="home-image-1" src="/static/homeimage1.png" alt="home-image-1">
+                <div class="home-image1-content-container">
+                    <div class="home-image1-content-heading">
+                        Anemia
+                    </div>
+                    <div class="home-image1-content-body">
+                        Anemia is a condition marked by low levels of red blood cells or hemoglobin, vital for oxygen
+                        transport.
+                        Red blood cells and hemoglobin are crucial for transporting oxygen from the lungs to the body's
+                        tissues .
+                    </div>
+                </div>
             </div>
 
-            <div class="home-heading">
-                ANEMIA
+            <div class="case-content">
+                Cases on Anemia
             </div>
-            <div class="home-content">
-                A very common medical condition in which the red blood cell count or the hemoglobin in the blood is
-                less than normal
+            <div>
+
             </div>
 
-            <div class="home-heading">
-                ANEMIA
+            <div class="cases-container">
+                <div class="case-box1">
+                    <img class="cases-iamge" id="home-image-1" src="/static/case1.jpg" alt="home-image-1">
+                    <div class="case-content-heading"> Case 1</div>
+                    <div class="case-content-body">
+                        A 60-year-old male with a history of pernicious anemia presents with neurological symptoms such
+                        as tingling sensations in the hands and feet, along with weakness and difficulty walking.
+                        Laboratory tests reveal low hemoglobin and hematocrit levels. Serum vitamin B12 levels are
+                        significantly decreased, confirming a diagnosis of vitamin B12 deficiency anemia.
+                    </div>
+                </div>
+
+                <div class="case-box2">
+                    <img class="cases-iamge" id="home-image-1" src="/static/case2.jpg" alt="home-image-1">
+                    <div class="case-content-heading"> Case 2</div>
+                    <div class="case-content-body">
+                        A 35-year-old female presents with fatigue, weakness, and shortness of breath on exertion. She
+                        reports heavy menstrual bleeding for several months. Laboratory tests reveal low hemoglobin and
+                        hematocrit levels, along with microcytic and hypochromic red blood cells. Iron studies confirm
+                        iron deficiency, indicating iron-deficiency anemia secondary to menorrhagia.
+                    </div>
+                </div>
+
+                <div class="case-box2">
+                    <img class="cases-iamge" id="home-image-1" src="/static/case3.jpg" alt="home-image-1">
+                    <div class="case-content-heading"> Case 3</div>
+                    <div class="case-content-body">
+                        A 25-year-old female of African descent presents with jaundice, dark urine, and fatigue.
+                        Laboratory tests reveal low hemoglobin and elevated bilirubin levels. Peripheral blood smear
+                        shows evidence of hemolysis with schistocytes and spherocytes. Coombs test is positive for
+                        autoimmune hemolytic anemia, suggesting an autoimmune etiology.
+                    </div>
+                </div>
             </div>
-            <div class="home-content">
-                A very common medical condition in which the red blood cell count or the hemoglobin in the blood is
-                less than normal
+
+            <div class="home-footer">
+
             </div>
+
         </div>
 
 
