@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction</title>
+    <style>
+        .main {
+            position: relative;
+            height: 100vh;
+            width: 100%;
+            background-image: url('/static/bg1.png');
+            background-size: cover;
+            background-position: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            overflow-y: auto;
+        }
+
+        .header-container {
+            height: 15%;
+            width: 100%;
+            padding-top: 0px;
+        }
+
+        .header-container h1 {
+            margin: 0px;
+            padding-top: 30px;
+            padding-left: 60px;
+            padding-bottom: 0px;
+            font-size: 50px;
+        }
+
+        @media screen and (max-width: 768px) {
+
+            .header-container {
+                height: 15%;
+            }
+
+            .header-container h1 {
+                padding: 10px;
+                font-size: 25px;
+            }
+        }
+
+        @media screen and (max-width: 768px) and (orientation: landscape) {
+            .header-container h1 {
+                padding-bottom: 0px;
+            }
+        }
+
+        .navbar-buttons-container {
+            text-align: right;
+            padding-top: 0px;
+            position: relative;
+            overflow-x: auto;
+            width: 100%;
+            white-space: nowrap;
+            scrollbar-width: none;
+        }
+
+        .btn {
+            border: none;
+            background-color: rgba(255, 255, 255, 0.274);
+            border-radius: 10px;
+            color: #000000;
+            margin: 14px 28px;
+            font-family: copperplate, Fantasy;
+            font-size: 18px;
+            cursor: pointer;
+            margin-left: 10px;
+            text-shadow: #f3f3f3 0.1em 0.1em 0.5em;
+        }
+
+        @media screen and (max-width: 768px) {
+            .btn {
+                font-size: 14px;
+                margin: 14px 15px;
+            }
+        }
+
+        @media screen and (max-width: 768px) and (orientation: landscape) {
+            .btn {
+                margin: 0px 15px;
+            }
+
+        }
+
+        .btn:hover {
+            color: rgb(255, 255, 255);
+        }
+
+        .upload-section {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .heading {
+            text-align: right;
+            padding-right: 50px;
+        }
+
+        /* 7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777 */
+
+        .body-container {
+            height: 85%;
+            width: 100%;
+            display: flex;
+        }
+
+        .result-box {
+            height: 50%;
+            margin: 10%;
+        }
+    </style>
+</head>
+
+<script>
+    document.getElementById('spinner-container').style.display = 'flex';
+
+    let showForm = false;
+
+    function handleShowForm() {
+        showForm = true;
+        renderFormContainer();
+    }
+
+    function handleCloseForm() {
+        showForm = false;
+        renderFormContainer();
+    }
+
+    function renderFormContainer() {
+        const formContainer = document.querySelector('.form-container');
+        formContainer.style.display = showForm ? 'block' : 'none';
+    }
+
+    renderFormContainer();
+
+    function openHome() {
+        window.location.href = "http://127.0.0.1:5000/";
+    }
+
+</script>
+
+<body>
+    <div class="main">
+        <div class="header-container">
+            <div>
+                <h1>AnemoProbe</h1>
+            </div>
+            <div class="navbar-buttons-container">
+                <button class="btn" onclick="openHome()">Home</button>
+                <button class="btn">Info</button>
+                <button class="btn">Check-Up</button>
+                <button class="btn">About</button>
+                <button class="btn">Contact us</button>
+            </div>
+        </div>
+
+        <div class="body-container">
+            <div class="result-box">
+                <h1>Prediction Result</h1>
+                <img id="result-image"
+                    src="{% if predicted_class == '0' %}/static/healthy.png{% else %}/static/Anemic.png{% endif %}"
+                    alt="Result Image">
+            </div>
+        </div>
+
+        <div class="spinner-container" id="spinner-container" style="display: none;">
+            <div class="spinner"></div>
+        </div>
+    </div>
+</body>
+
+</html>

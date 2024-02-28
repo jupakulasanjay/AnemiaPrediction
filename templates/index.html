@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anemia Prediction</title>
+    <style>
+        body {
+            background-image: url('/static/bg1.png');
+            background-size: cover;
+            background-position: top;
+            background-repeat: no-repeat;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
+        .header-container {
+            height: 15%;
+            width: 100%;
+            padding-top: 0px;
+        }
+
+        .header-container h1 {
+            margin: 0px;
+            padding-top: 30px;
+            color: #f3f3f3;
+            padding-left: 60px;
+            padding-bottom: 0px;
+            font-size: 50px;
+        }
+
+        @media screen and (max-width: 768px) {
+
+            .header-container {
+                height: 15%;
+            }
+
+            .header-container h1 {
+                padding: 10px;
+                font-size: 25px;
+            }
+        }
+
+        @media screen and (max-width: 768px) and (orientation: landscape) {
+            .header-container h1 {
+                padding-bottom: 0px;
+            }
+        }
+
+        .navbar-buttons-container {
+            text-align: right;
+            padding-top: 0px;
+            position: relative;
+            overflow-x: auto;
+            width: 100%;
+            white-space: nowrap;
+            scrollbar-width: none;
+        }
+
+        .navbar-buttons-container a {
+            text-decoration: none;
+        }
+
+        .btn {
+            border: none;
+            background-color: rgba(255, 255, 255, 0.274);
+            border-radius: 10px;
+            color: #000000;
+            margin: 14px 28px;
+            font-family: copperplate, Fantasy;
+            font-size: 18px;
+            cursor: pointer;
+            margin-left: 10px;
+            text-shadow: #f3f3f3 0.1em 0.1em 0.5em;
+        }
+
+        @media screen and (max-width: 768px) {
+            .btn {
+                font-size: 14px;
+                margin: 14px 15px;
+            }
+        }
+
+        @media screen and (max-width: 768px) and (orientation: landscape) {
+            .btn {
+                margin: 0px 15px;
+            }
+
+        }
+
+        .btn:hover {
+            color: rgb(255, 255, 255);
+        }
+
+        .upload-section {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .heading {
+            text-align: right;
+            padding-right: 50px;
+        }
+
+        /* 7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777 */
+
+        .body-container {
+            height: 85%;
+            width: 100%;
+            display: flex;
+        }
+
+
+        /*    Design        ############################################################################################################# */
+
+        .design {
+            width: 100%;
+            overflow-x: hidden;
+            position: absolute;
+        }
+
+        .design::-webkit-scrollbar {
+            display: none;
+            /* Hide scrollbar in webkit-based browsers */
+        }
+
+        .home-heading {
+            font-size: 50px;
+            padding-left: 10%;
+            width: 50%;
+            font-family: Georgia, serif;
+            margin-top: 20%;
+        }
+
+        .home-content {
+            font-size: 30px;
+            width: 50%;
+            font-family: Verdana, sans-serif;
+            padding-left: 10%;
+        }
+
+        .form-container {
+            width: 17%;
+            height: 85%;
+            position: absolute;
+            z-index: 1;
+            margin-top: 10px;
+            right: 0;
+            transition: transform 0.5s ease;
+            transform: translateX(100%);
+        }
+
+        .form {
+            background-color: #ffffffaf;
+            width: 100%;
+            max-height: 95%;
+            position: absolute;
+            overflow-x: hidden;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            border: #0000003b solid 1px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px;
+            border-radius: 12px;
+        }
+
+
+        .form-container.open {
+            right: 20px;
+            transform: translateX(0);
+        }
+
+
+
+        .form::-webkit-scrollbar {
+            display: none;
+        }
+
+        @media screen and (max-width: 768px) {
+            .form-container {
+                width: 70%;
+                z-index: 9;
+                height: 100%;
+                margin-left: 0%;
+                padding-left: 10%;
+                margin-bottom: 10px;
+                position: absolute;
+                display: none;
+
+            }
+
+            .form {
+                max-height: 80%;
+                background-color: #ffffff;
+            }
+
+            .form-container.open {
+                margin-left: 0%;
+            }
+
+            .form::-webkit-scrollbar {
+                display: none;
+            }
+        }
+
+        .form-heading {
+            display: flex;
+        }
+
+        .form h2 {
+            text-align: center;
+            padding: 10px;
+            width: 1000%;
+            color: #ffffff;
+            font-size: 18px;
+            border-bottom: black solid;
+            border-radius: 7px;
+            margin-top: 0px;
+            box-shadow: #616669 1px 1px 10px 3px;
+            background: #ea03038f;
+
+        }
+
+        .close-button {
+            position: absolute;
+            font-size: 18px;
+            right: 10px;
+            padding: 10px;
+            cursor: pointer;
+            color: #000000;
+            font-family: Arial;
+            padding-top: 12px;
+        }
+
+        .close-button:hover {
+            color: #ffffff;
+        }
+
+        .form-section {
+            text-align: center;
+            padding-top: 30px;
+            padding-top: 10px;
+            padding-left: 10px;
+            display: grid;
+            margin-left: 0px;
+        }
+
+        .submit-button-container {
+            text-align: center;
+        }
+
+        .submit-button {
+            width: 100px;
+            height: 40px;
+            margin: 20px;
+            border-radius: 10px;
+            box-shadow: #616669 0px 0px 8px 3px;
+            border: none;
+        }
+
+        .input {
+            padding-bottom: 5px;
+        }
+
+        .select-box {
+            width: 215px;
+            border-radius: 7px;
+            height: 30px;
+            padding-left: 10px;
+            border-width: 1px;
+            background-color: rgba(255, 255, 255, 0.658);
+        }
+
+        .input-container {
+            display: flex;
+            align-items: center;
+            margin-left: 30px;
+        }
+
+        .input-box {
+            width: 200px;
+            border-radius: 7px;
+            height: 25px;
+            padding-left: 10px;
+            border-width: 1px;
+            background-color: rgba(218, 231, 233, 0.658);
+        }
+
+        .label-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .label-text {
+            font-family: Times;
+            margin-left: 30px;
+            padding-top: 10px;
+            padding-bottom: 3px;
+            font-size: 20px;
+            ;
+        }
+
+        .label-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .spinner-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .spinner {
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<script>
+    function showSpinner() {
+        document.getElementById('spinner-container').style.display = 'flex';
+    }
+
+    function hideSpinner() {
+        document.getElementById('spinner-container').style.display = 'none';
+    }
+
+    let showForm = false;
+
+    function handleShowForm() {
+        showForm = true;
+        renderFormContainer();
+    }
+
+    function handleCloseForm() {
+        showForm = false;
+        renderFormContainer();
+    }
+
+
+    function renderFormContainer() {
+        const formContainer = document.querySelector('.form-container');
+        if (showForm) {
+            formContainer.style.display = 'block';
+            formContainer.classList.add('open');
+        } else {
+            formContainer.classList.remove('open');
+            setTimeout(() => {
+                formContainer.style.display = 'none';
+            }, 500);
+        }
+    }
+
+    renderFormContainer();
+
+    function loadContent(url, containerId) {
+        if (url === 'http://127.0.0.1:5000/') {
+            handleCloseForm();
+        }
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById(containerId).innerHTML = this.responseText;
+            }
+        };
+        xhttp.open("GET", url, true);
+        xhttp.send();
+    }
+
+    function openHome() {
+        window.location.href = "http://127.0.0.1:5000/";
+    }
+
+</script>
+
+<body>
+
+    <div class="header-container">
+        <div>
+            <h1>AnemoProbe</h1>
+        </div>
+        <div class="navbar-buttons-container">
+            <nav>
+                <div id="navbarSupportedContent">
+                    <button class="btn" onclick="openHome()">Home</button>
+                    <a class="btn" href="#"
+                        onclick="loadContent('http://127.0.0.1:5000/info','content-container')">Info</a>
+                    <button class="btn" onclick="handleShowForm()">Check-Up</button>
+                    <a class="btn" href="#"
+                        onclick="loadContent('http://127.0.0.1:5000/about','content-container')">About</a>
+                    <a class="btn" href="#"
+                        onclick="loadContent('http://127.0.0.1:5000/contactUs','content-container')">Contact us</a>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <div class="body-container">
+        <div id="content-container" class="design">
+            <div class="home-heading">
+                ANEMIA
+            </div>
+            <div class="home-content">
+                A very common medical condition in which the red blood cell count or the hemoglobin in the blood is
+                less than normal
+            </div>
+
+            <div class="home-heading">
+                ANEMIA
+            </div>
+            <div class="home-content">
+                A very common medical condition in which the red blood cell count or the hemoglobin in the blood is
+                less than normal
+            </div>
+
+            <div class="home-heading">
+                ANEMIA
+            </div>
+            <div class="home-content">
+                A very common medical condition in which the red blood cell count or the hemoglobin in the blood is
+                less than normal
+            </div>
+            <div class="home-heading">
+                ANEMIA
+            </div>
+            <div class="home-content">
+                A very common medical condition in which the red blood cell count or the hemoglobin in the blood is
+                less than normal
+            </div>
+
+            <div class="home-heading">
+                ANEMIA
+            </div>
+            <div class="home-content">
+                A very common medical condition in which the red blood cell count or the hemoglobin in the blood is
+                less than normal
+            </div>
+
+            <div class="home-heading">
+                ANEMIA
+            </div>
+            <div class="home-content">
+                A very common medical condition in which the red blood cell count or the hemoglobin in the blood is
+                less than normal
+            </div>
+        </div>
+
+
+        <div class="form-container">
+            <div class="form">
+                <div class="form-heading">
+                    <h2 class="heading">Anemia Check-up From </h2>
+                    <span class="close-button" onclick="handleCloseForm()">X</span>
+                </div>
+
+
+                <form id="anemia-form" class="form-section" action="/predict" method="post"
+                    enctype="multipart/form-data" onsubmit="showSpinner()">
+
+                    <div class="input">
+                        <div class="label-container">
+                            <label class="label-text" for="GENDER">Gender:</label>
+                        </div>
+                        <div class="input-container">
+                            <select class="select-box" name="GENDER" id="GENDER" required>
+                                <option value="" disabled selected>Select gender</option>
+                                <option value="1">Male</option>
+                                <option value="0">Female</option>
+                            </select><br>
+                        </div>
+                    </div>
+
+
+                    <div class="input">
+                        <div class="label-container">
+                            <label class="label-text" for="WBC">White Blood Cell:</label>
+                        </div>
+                        <div class="input-container">
+                            <input class="input-box" type="text" name="WBC" id="WBC" required><br>
+                        </div>
+                    </div>
+
+                    <div class="input">
+                        <div class="label-container">
+                            <label class="label-text" for="NE#">Neutrophil count:</label>
+                        </div>
+                        <div class="input-container">
+                            <input class="input-box" type="text" name="NE#" id="NE#" required><br>
+                        </div>
+                    </div>
+
+                    <div class="input">
+                        <div class="label-container">
+                            <label class="label-text" for="LY#">Lymphocyte count:</label>
+                        </div>
+                        <div class="input-container">
+                            <input class="input-box" type="text" name="LY#" id="LY#" required><br>
+                        </div>
+                    </div>
+
+                    <div class="input">
+                        <div class="label-container">
+                            <label class="label-text" for="MO#">Monocyte count:</label>
+                        </div>
+                        <div class="input-container">
+                            <input class="input-box" type="text" name="MO#" id="MO#" required><br>
+                        </div>
+                    </div>
+
+                    <div class="input">
+                        <div class="label-container">
+                            <label class="label-text" for="EO#">Eosinophil count:</label>
+                        </div>
+                        <div class="input-container">
+                            <input class="input-box" type="text" name="EO#" id="EO#" required><br>
+                        </div>
+                    </div>
+
+                    <div class="input">
+                        <div class="label-container">
+                            <label class="label-text" for="BA#">Basophil count:</label>
+                        </div>
+                        <div class="input-container">
+                            <input class="input-box" type="text" name="BA#" id="BA#" required><br>
+                        </div>
+                    </div>
+
+                    <div class="input">
+                        <div class="label-container">
+                            <label class="label-text" for="RBC">Red Blood Cell:</label>
+                        </div>
+                        <div class="input-container">
+                            <input class="input-box" type="text" name="RBC" id="RBC" required><br>
+                        </div>
+                    </div>
+
+                    <div class="input">
+                        <div class="label-container">
+                            <label class="label-text" for="HGB">Hemoglobin:</label>
+                        </div>
+                        <div class="input-container">
+                            <input class="input-box" type="text" name="HGB" id="HGB" required><br>
+                        </div>
+                    </div>
+
+                    <div class="input">
+                        <div class="label-container">
+                            <label class="label-text" for="HCT">Hematocrit:</label>
+                        </div>
+                        <div class="input-container">
+                            <input class="input-box" type="text" name="HCT" id="HCT" required><br>
+                        </div>
+                    </div>
+
+                    <div class="input">
+                        <div class="label-container">
+                            <label class="label-text" for="MCV">Mean Corpuscular V:</label>
+                        </div>
+                        <div class="input-container">
+                            <input class="input-box" type="text" name="MCV" id="MCV" required><br>
+                        </div>
+                    </div>
+
+                    <div class="input">
+                        <div class="label-container">
+                            <label class="label-text" for="MCH">Mean Corpuscular H:</label>
+                        </div>
+                        <div class="input-container">
+                            <input class="input-box" type="text" name="MCH" id="MCH" required><br>
+                        </div>
+                    </div>
+
+                    <div class="input">
+                        <div class="label-container">
+                            <label class="label-text" for="MCHC">MCHC:</label>
+                        </div>
+                        <div class="input-container">
+                            <input class="input-box" type="text" name="MCHC" id="MCHC" required><br>
+                        </div>
+                    </div>
+
+                    <div class="input">
+                        <div class="label-container">
+                            <label class="label-text" for="RDW">Red Cell Distribution:</label>
+                        </div>
+                        <div class="input-container">
+                            <input class="input-box" type="text" name="RDW" id="RDW" required><br>
+                        </div>
+                    </div>
+
+                    <div class="input">
+                        <div class="label-container">
+                            <label class="label-text" for="PLT">Platelet count:</label>
+                        </div>
+                        <div class="input-container">
+                            <input class="input-box" type="text" name="PLT" id="PLT" required><br>
+                        </div>
+                    </div>
+
+                    <div class="input">
+                        <div class="label-container">
+                            <label class="label-text" for="MPV">Mean Platelet Volume:</label>
+                        </div>
+                        <div class="input-container">
+                            <input class="input-box" type="text" name="MPV" id="MPV" required><br>
+                        </div>
+                    </div>
+
+                    <div class="input">
+                        <div class="label-container">
+                            <label class="label-text" for="PCT">Plateletcrit:</label>
+                        </div>
+                        <div class="input-container">
+                            <input class="input-box" type="text" name="PCT" id="PCT" required><br>
+                        </div>
+                    </div>
+
+                    <div class="input">
+                        <div class="label-container">
+                            <label class="label-text" for="PDW">Platelet Distribution:</label>
+                        </div>
+                        <div class="input-container">
+                            <input class="input-box" type="text" name="PDW" id="PDW" required><br>
+                        </div>
+                    </div>
+
+                    <div class="input">
+                        <div class="label-container">
+                            <label class="label-text" for="SD">SD RBC:</label>
+                        </div>
+                        <div class="input-container">
+                            <input class="input-box" type="text" name="SD" id="SD" required><br>
+                        </div>
+                    </div>
+
+                    <div class="input">
+                        <div class="label-container">
+                            <label class="label-text" for="SDTSD">SD TSD:</label>
+                        </div>
+                        <div class="input-container">
+                            <input class="input-box" type="text" name="SDTSD" id="SDTSD" required><br>
+                        </div>
+                    </div>
+
+                    <div class="input">
+                        <div class="label-container">
+                            <label class="label-text" for="TSD">Time Series Diff:</label>
+                        </div>
+                        <div class="input-container">
+                            <input class="input-box" type="text" name="TSD" id="TSD" required><br>
+                        </div>
+                    </div>
+
+                    <div class="input">
+                        <div class="label-container">
+                            <label class="label-text" for="FERRITTE">Ferritin level:</label>
+                        </div>
+                        <div class="input-container">
+                            <input class="input-box" type="text" name="FERRITTE" id="FERRITTE" required><br>
+                        </div>
+                    </div>
+
+                    <div class="input">
+                        <div class="label-container">
+                            <label class="label-text" for="FOLATE">Folate level:</label>
+                        </div>
+                        <div class="input-container">
+                            <input class="input-box" type="text" name="FOLATE" id="FOLATE" required><br>
+                        </div>
+                    </div>
+
+                    <div class="input">
+                        <div class="label-container">
+                            <label class="label-text" for="B12">Vitamin B12 level:</label>
+                        </div>
+                        <div class="input-container">
+                            <input class="input-box" type="text" name="B12" id="B12" required><br>
+                        </div>
+                    </div>
+
+                    <br>
+                    <div class="submit-button-container">
+                        <input class="submit-button" type="submit" value="submit">
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="spinner-container" id="spinner-container" style="display: none;">
+        <div class="spinner"></div>
+    </div>
+</body>
+
+</html>
