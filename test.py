@@ -64,14 +64,8 @@ def predict():
     ]
 
     user_input = {feature: request.form.get(feature) for feature in feature_names}
-    filename = "C:/Users/sanju/OneDrive/Desktop/pro11/uploads/uploaded_file.csv"
-    df = pd.read_csv(filename)
-    feature_names = [
-        'GENDER', 'RBC', 'HGB', 'HCT', 'MCV', 'MCH', 'MCHC', 'RDW', 'FOLATE', 'B12'
-    ]
-    
     user_data = pd.DataFrame(user_input, index=[0])
-
+    print("\n\n", user_data)
     
     X_train = df[feature_names]
     y_train = df['All_Class']
