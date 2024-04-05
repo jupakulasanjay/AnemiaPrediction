@@ -182,14 +182,12 @@
       }
 
       .form-container {
-        width: 17%;
-        height: 85%;
+        width: 20%;
+        height: 78%;
         position: absolute;
         z-index: 1;
         margin-top: 10px;
-        right: 0;
-        transition: transform 0.5s ease;
-        transform: translateX(100%);
+        right: 3%;
       }
 
       .home-image1-content-container {
@@ -373,11 +371,6 @@
         border-radius: 12px;
       }
 
-      .form-container.open {
-        right: 20px;
-        transform: translateX(0);
-      }
-
       .form::-webkit-scrollbar {
         display: none;
       }
@@ -388,21 +381,15 @@
           z-index: 9;
           height: 100%;
           margin-left: 0%;
-          padding-left: 10%;
           margin-bottom: 10px;
           position: absolute;
           display: none;
+          right: 15%;
         }
 
         .form {
           max-height: 80%;
           background-color: #ffffff;
-        }
-
-        .form-container.open {
-          left: 15%;
-          transform: translateX(0);
-          padding-left: 0px;
         }
 
         .form::-webkit-scrollbar {
@@ -578,7 +565,7 @@
         formContainer.classList.remove("open");
         setTimeout(() => {
           formContainer.style.display = "none";
-        }, 500);
+        });
       }
     }
 
@@ -710,7 +697,7 @@
       <div class="form-container">
         <div class="form">
           <div class="form-heading">
-            <h2 class="heading">Anemia Check-up Form</h2>
+            <h2 class="heading">Anemia Check-up</h2>
             <span class="close-button" onclick="handleCloseForm()">X</span>
           </div>
 
