@@ -2,15 +2,15 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Prediction</title>
     <style>
         .main {
             position: relative;
             height: 100vh;
             width: 100%;
-            background-image: url('/static/bg1.png');
+            background-image: url("/static/bg1.png");
             background-size: cover;
             background-position: center;
             position: fixed;
@@ -35,7 +35,6 @@
         }
 
         @media screen and (max-width: 768px) {
-
             .header-container {
                 height: 15%;
             }
@@ -86,7 +85,6 @@
             .btn {
                 margin: 0px 15px;
             }
-
         }
 
         .btn:hover {
@@ -111,15 +109,76 @@
             display: flex;
         }
 
+        .body-container-left {
+            width: 60%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .result-container {
+            width: 100%;
+            display: flex;
+        }
+
+
         .result-box {
-            height: 50%;
-            margin: 10%;
+            height: 100%;
+            margin: 7% 5% 0% 20%;
+        }
+
+        .bar {
+            width: 0.5%;
+            background-color: black;
+            height: 90%;
+            margin-top: 5%;
+        }
+
+        .result-text {
+            margin-top: 10%;
+            margin-bottom: 0%;
+            height: 10%;
+            margin-left: 5%;
+        }
+
+        .result-answer {
+            margin-top: 5%;
+            margin-left: 5%;
+            font-size: 30px;
+            align-content: center;
+            font-style: italic;
+        }
+
+        @media screen and (max-width: 768px) {
+            .result-container {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .result-text {
+                margin-top: 10%;
+                margin-bottom: 0%;
+                height: 10%;
+                margin-left: 55%;
+                font-size: 20px;
+                margin-bottom: 20px;
+            }
+
+            .result-answer {
+                margin-top: 75%;
+                margin-left: 25%;
+                font-size: 30px;
+                align-content: center;
+                position: absolute;
+                font-style: italic;
+            }
         }
     </style>
 </head>
 
 <script>
-    document.getElementById('spinner-container').style.display = 'flex';
+    document.getElementById("spinner-container").style.display = "flex";
 
     let showForm = false;
 
@@ -134,8 +193,8 @@
     }
 
     function renderFormContainer() {
-        const formContainer = document.querySelector('.form-container');
-        formContainer.style.display = showForm ? 'block' : 'none';
+        const formContainer = document.querySelector(".form-container");
+        formContainer.style.display = showForm ? "block" : "none";
     }
 
     renderFormContainer();
@@ -143,7 +202,6 @@
     function openHome() {
         window.location.href = "http://127.0.0.1:5000/";
     }
-
 </script>
 
 <body>
@@ -158,18 +216,38 @@
         </div>
 
         <div class="body-container">
-            <div class="result-box">
-                <h1>Prediction Result</h1>
-                <p>{{predicted_class}}</p>
-                <img id="result-image"
-                    src="{% if predicted_anemia == 0 %}/static/healthy.png{% else %}/static/Anemic.png{% endif %}"
-                    alt="Result Image">
+            <div class="body-container-left">
+                <div class="result-text">
+                    <h1>Result</h1>
+                </div>
+                <div class="result-container">
+                    <div class="result-box">
+                        <!-- <p>{{predicted_class}}</p> -->
+                        <img id="result-image"
+                            src="{% if predicted_anemia == 0 %}/static/healthy.png{% else %}/static/Anemic.png{% endif %}"
+                            alt="Result Image" />
+                    </div>
+                    <div class="bar"></div>
+                    <div class="result-answer">{% if predicted_class == 0 %}
+                        Non-Anemic
+                        {% elif predicted_class == 1 %}
+                        <span>Hemoglobin Deficiency</span> <br />Anemic
+                        {% elif predicted_class == 2 %}
+                        <span>Iron Deficiency</span> <br />Anemic
+                        {% elif predicted_class == 3 %}
+                        Folate Anemic
+                        {% elif predicted_class == 4 %}
+                        <span>Vitamin B12 Deficiency</span>
+                        <br />
+                        <span>Anemic</span>
+                        {% endif %}
+                    </div>
+
+
+                </div>
             </div>
         </div>
-
-        <div class="spinner-container" id="spinner-container" style="display: none;">
-            <div class="spinner"></div>
-        </div>
+    </div>
     </div>
 </body>
 
