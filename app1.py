@@ -17,6 +17,10 @@ rf_model = load_model('rf_model.pkl')
 gb_model = load_model('gb_model.pkl')
 dnn_model = tf.keras.models.load_model('dnn_model.h5')
 
+@app.route('/contactUs')
+def contactUs():
+    return render_template('contactUs.html')
+
 @app.route('/')
 def index():
     features = [
