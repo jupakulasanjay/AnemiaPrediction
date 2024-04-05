@@ -5,17 +5,17 @@ from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.model_selection import train_test_split
 from flask import Flask, render_template, request
 import joblib
-from test5 import predict_Dlresult
+from ModelPredict import predict_Dlresult
 
 app = Flask(__name__, static_url_path='/static')
 
 def load_model(model_filename):
     return joblib.load(model_filename)
 
-# Load saved models
-rf_model = load_model('rf_model.pkl')
-gb_model = load_model('gb_model.pkl')
-dnn_model = tf.keras.models.load_model('dnn_model.h5')
+# # Load saved models
+# rf_model = load_model('rf_model.pkl')
+# gb_model = load_model('gb_model.pkl')
+# dnn_model = tf.keras.models.load_model('dnn_model.h5')
 
 @app.route('/contactUs')
 def contactUs():

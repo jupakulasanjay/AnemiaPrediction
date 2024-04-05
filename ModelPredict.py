@@ -49,10 +49,6 @@ def predict_Dlresult(user_input):
     
     accuracy_rf = accuracy_score(y_test_base, rf_model.predict(X_test_base))
     accuracy_gb = accuracy_score(y_test_base, gb_model.predict(X_test_base))
-    
-    print("Random Forest Accuracy:", accuracy_rf)
-    print("Gradient Boosting Accuracy:", accuracy_gb)
-    print("DNN Accuracy:", 92.7597813245483619)
 
     return int(predictions_rf[0]), int(predictions_gb[0]), int(dnn_predictions[0][0])
 
