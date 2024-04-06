@@ -43,10 +43,6 @@ def predict_Dlresult(user_input):
     predictions_dnn = dnn_model.predict(X_test)
     dnn_predictions = np.round(predictions_dnn).astype(int)
     
-    print("Random Forest Predictions:", predictions_rf)
-    print("Gradient Boosting Predictions:", predictions_gb)
-    print("DNN Predictions:", dnn_predictions)
-    
     accuracy_rf = accuracy_score(y_test_base, rf_model.predict(X_test_base))
     accuracy_gb = accuracy_score(y_test_base, gb_model.predict(X_test_base))
 
