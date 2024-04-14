@@ -1,139 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Anemia Prediction</title>
-    <style>
-      body {
-        background-image: url("/static/bg1.png");
-        background-size: cover;
-        background-position: top;
-        background-repeat: no-repeat;
-        max-width: 100%;
-        overflow-x: hidden;
-      }
 
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Anemia Prediction</title>
+  <style>
+    body {
+      background-image: url("/static/bg1.png");
+      background-size: cover;
+      background-position: top;
+      background-repeat: no-repeat;
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+
+    .header-container {
+      height: 15%;
+      width: 100%;
+      padding-top: 0px;
+    }
+
+    .header-container h1 {
+      margin: 0px;
+      padding-top: 30px;
+      color: #f3f3f3;
+      padding-left: 60px;
+      padding-bottom: 0px;
+      font-size: 50px;
+    }
+
+    @media screen and (max-width: 768px) {
       .header-container {
         height: 15%;
-        width: 100%;
-        padding-top: 0px;
       }
 
       .header-container h1 {
-        margin: 0px;
-        padding-top: 30px;
-        color: #f3f3f3;
-        padding-left: 60px;
+        padding: 10px;
+        font-size: 25px;
+      }
+    }
+
+    @media screen and (max-width: 768px) and (orientation: landscape) {
+      .header-container h1 {
         padding-bottom: 0px;
-        font-size: 50px;
       }
+    }
 
-      @media screen and (max-width: 768px) {
-        .header-container {
-          height: 15%;
-        }
+    .navbar-buttons-container {
+      text-align: right;
+      padding-top: 0px;
+      position: relative;
+      overflow-x: auto;
+      width: 100%;
+      white-space: nowrap;
+      scrollbar-width: none;
+    }
 
-        .header-container h1 {
-          padding: 10px;
-          font-size: 25px;
-        }
-      }
-
-      @media screen and (max-width: 768px) and (orientation: landscape) {
-        .header-container h1 {
-          padding-bottom: 0px;
-        }
-      }
-
+    @media screen and (max-width: 768px) {
       .navbar-buttons-container {
-        text-align: right;
-        padding-top: 0px;
-        position: relative;
-        overflow-x: auto;
-        width: 100%;
-        white-space: nowrap;
-        scrollbar-width: none;
+        width: 80%;
       }
+    }
 
-      @media screen and (max-width: 768px) {
-        .navbar-buttons-container {
-          width: 80%;
-        }
-      }
+    .navbar-buttons-container a {
+      text-decoration: none;
+    }
 
-      .navbar-buttons-container a {
-        text-decoration: none;
-      }
+    .btn {
+      border: none;
+      background-color: rgba(255, 255, 255, 0.274);
+      border-radius: 10px;
+      color: #000000;
+      margin: 14px 28px;
+      font-family: copperplate, Fantasy;
+      font-size: 18px;
+      cursor: pointer;
+      margin-left: 10px;
+      text-shadow: #f3f3f3 0.1em 0.1em 0.5em;
+    }
 
+    @media screen and (max-width: 768px) {
       .btn {
-        border: none;
-        background-color: rgba(255, 255, 255, 0.274);
-        border-radius: 10px;
-        color: #000000;
-        margin: 14px 28px;
-        font-family: copperplate, Fantasy;
-        font-size: 18px;
-        cursor: pointer;
-        margin-left: 10px;
-        text-shadow: #f3f3f3 0.1em 0.1em 0.5em;
+        font-size: 14px;
+        margin: 14px 15px;
       }
+    }
 
-      @media screen and (max-width: 768px) {
-        .btn {
-          font-size: 14px;
-          margin: 14px 15px;
-        }
+    @media screen and (max-width: 768px) and (orientation: landscape) {
+      .btn {
+        margin: 0px 15px;
       }
+    }
 
-      @media screen and (max-width: 768px) and (orientation: landscape) {
-        .btn {
-          margin: 0px 15px;
-        }
-      }
+    .btn:hover {
+      color: rgb(255, 255, 255);
+    }
 
-      .btn:hover {
-        color: rgb(255, 255, 255);
-      }
+    .upload-section {
+      text-align: center;
+      margin-top: 20px;
+    }
 
-      .upload-section {
-        text-align: center;
-        margin-top: 20px;
-      }
+    .heading {
+      text-align: right;
+      padding-right: 50px;
+    }
 
-      .heading {
-        text-align: right;
-        padding-right: 50px;
-      }
+    /* 7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777 */
 
-      /* 7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777 */
+    .body-container {
+      height: 85%;
+      width: 100%;
+      display: flex;
+    }
 
-      .body-container {
-        height: 85%;
-        width: 100%;
-        display: flex;
-      }
+    /*    Design        ############################################################################################################# */
 
-      /*    Design        ############################################################################################################# */
+    .design {
+      width: 100%;
+      overflow-x: hidden;
+      position: absolute;
+    }
 
-      .design {
-        width: 100%;
-        overflow-x: hidden;
-        position: absolute;
-      }
+    .design::-webkit-scrollbar {
+      display: none;
+      /* Hide scrollbar in webkit-based browsers */
+    }
 
-      .design::-webkit-scrollbar {
-        display: none;
-        /* Hide scrollbar in webkit-based browsers */
-      }
+    .home-heading {
+      font-size: 50px;
+      padding-left: 10%;
+      width: 50%;
+      font-family: Georgia, serif;
+      margin-top: 12%;
+      color: white;
+    }
 
+    .home-image1 {
+      font-size: 50px;
+      margin: 10%;
+      width: 80%;
+      font-family: Georgia, serif;
+      margin-top: 15%;
+      display: flex;
+    }
+
+    .home-content {
+      font-size: 20px;
+      width: 30%;
+      font-family: Verdana, sans-serif;
+      padding-left: 10%;
+      color: white;
+    }
+
+    @media screen and (max-width: 768px) {
       .home-heading {
-        font-size: 50px;
+        font-size: 30px;
         padding-left: 10%;
-        width: 50%;
         font-family: Georgia, serif;
-        margin-top: 12%;
-        color: white;
+        margin-top: 20%;
+        color: black;
+      }
+
+      .home-content {
+        font-size: 15px;
+        width: 70%;
+        font-family: Verdana, sans-serif;
+        padding-left: 10%;
+        color: hsla(0, 0%, 13%, 1);
       }
 
       .home-image1 {
@@ -143,53 +178,55 @@
         font-family: Georgia, serif;
         margin-top: 15%;
         display: flex;
+        flex-direction: column;
       }
+    }
 
-      .home-content {
-        font-size: 20px;
-        width: 30%;
-        font-family: Verdana, sans-serif;
-        padding-left: 10%;
-        color: white;
-      }
+    .form-container {
+      width: 20%;
+      height: 78%;
+      position: absolute;
+      z-index: 1;
+      margin-top: 10px;
+      right: 3%;
+      display: none;
+    }
 
-      @media screen and (max-width: 768px) {
-        .home-heading {
-          font-size: 30px;
-          padding-left: 10%;
-          font-family: Georgia, serif;
-          margin-top: 20%;
-          color: black;
-        }
+    .home-image1-content-container {
+      font-size: 50px;
+      font-family: Verdana, sans-serif;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-items: end;
+      align-items: flex-end;
+    }
 
-        .home-content {
-          font-size: 15px;
-          width: 70%;
-          font-family: Verdana, sans-serif;
-          padding-left: 10%;
-          color: hsla(0, 0%, 13%, 1);
-        }
+    .home-image1-content-heading {
+      font-size: 50px;
+      font-family: Verdana, sans-serif;
+      margin-top: 50px;
+      color: #aa4949;
+      margin-right: 20%;
+    }
 
-        .home-image1 {
-          font-size: 50px;
-          margin: 10%;
-          width: 80%;
-          font-family: Georgia, serif;
-          margin-top: 15%;
-          display: flex;
-          flex-direction: column;
-        }
-      }
+    .home-image1-content-body {
+      font-size: 25px;
+      padding-left: 20px;
+      color: #682d2d;
+      padding-top: 10px;
+      font-family: Verdana, sans-serif;
+      width: 60%;
+      text-align: justify;
+      padding-right: 20px;
+      margin-top: 10px;
+      background: #ffbfbf3b;
+      padding-bottom: 10px;
+      border-radius: 20px;
+      justify-items: end;
+    }
 
-      .form-container {
-        width: 20%;
-        height: 78%;
-        position: absolute;
-        z-index: 1;
-        margin-top: 10px;
-        right: 3%;
-      }
-
+    @media screen and (max-width: 768px) {
       .home-image1-content-container {
         font-size: 50px;
         font-family: Verdana, sans-serif;
@@ -197,7 +234,7 @@
         display: flex;
         flex-direction: column;
         justify-items: end;
-        align-items: flex-end;
+        align-items: center;
       }
 
       .home-image1-content-heading {
@@ -205,16 +242,16 @@
         font-family: Verdana, sans-serif;
         margin-top: 50px;
         color: #aa4949;
-        margin-right: 20%;
+        margin-right: 0%;
       }
 
       .home-image1-content-body {
-        font-size: 25px;
+        font-size: 15px;
         padding-left: 20px;
         color: #682d2d;
         padding-top: 10px;
         font-family: Verdana, sans-serif;
-        width: 60%;
+        width: 80%;
         text-align: justify;
         padding-right: 20px;
         margin-top: 10px;
@@ -224,55 +261,79 @@
         justify-items: end;
       }
 
-      @media screen and (max-width: 768px) {
-        .home-image1-content-container {
-          font-size: 50px;
-          font-family: Verdana, sans-serif;
-          width: 100%;
-          display: flex;
-          flex-direction: column;
-          justify-items: end;
-          align-items: center;
-        }
-
-        .home-image1-content-heading {
-          font-size: 50px;
-          font-family: Verdana, sans-serif;
-          margin-top: 50px;
-          color: #aa4949;
-          margin-right: 0%;
-        }
-
-        .home-image1-content-body {
-          font-size: 15px;
-          padding-left: 20px;
-          color: #682d2d;
-          padding-top: 10px;
-          font-family: Verdana, sans-serif;
-          width: 80%;
-          text-align: justify;
-          padding-right: 20px;
-          margin-top: 10px;
-          background: #ffbfbf3b;
-          padding-bottom: 10px;
-          border-radius: 20px;
-          justify-items: end;
-        }
-        .case-content {
-          font-size: 25px;
-          width: 60%;
-          font-family: Verdana, sans-serif;
-          padding-left: 20%;
-          color: #aa4949;
-          margin-top: 8%;
-        }
-      }
-
       .case-content {
-        font-size: 60px;
-        width: 40%;
+        font-size: 25px;
+        width: 60%;
         font-family: Verdana, sans-serif;
-        padding-left: 35%;
+        padding-left: 20%;
+        color: #aa4949;
+        margin-top: 8%;
+      }
+    }
+
+    .case-content {
+      font-size: 60px;
+      width: 40%;
+      font-family: Verdana, sans-serif;
+      padding-left: 35%;
+      color: #aa4949;
+      margin-top: 8%;
+    }
+
+    .cases-container {
+      margin-left: 10%;
+      margin-right: 10%;
+      display: flex;
+      margin-top: 5%;
+      justify-content: space-between;
+    }
+
+    .case-box {
+      box-shadow: 0 -2px 9px 0 rgb(238 73 73 / 71%), 0 0px;
+      width: 20%;
+      overflow: hidden;
+    }
+
+    .cases-iamge {
+      width: 100%;
+      height: 30%;
+    }
+
+    .case-content-heading {
+      padding-left: 20px;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      font-size: 25px;
+      height: 5%;
+    }
+
+    .case-content-body {
+      width: 80%;
+      margin: 0% 10% 10% 10%;
+      text-align: justify;
+      overflow-y: auto;
+      max-height: 90%;
+    }
+
+    .case-content-body::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .case-content-body::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .case-content-body::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 10px;
+    }
+
+    @media screen and (max-width: 768px) {
+      .case-content {
+        font-size: 25px;
+        width: 60%;
+        font-family: Verdana, sans-serif;
+        padding-left: 20%;
         color: #aa4949;
         margin-top: 8%;
       }
@@ -282,598 +343,678 @@
         margin-right: 10%;
         display: flex;
         margin-top: 5%;
-        justify-content: space-between;
+        flex-direction: column;
+        align-items: center;
       }
 
       .case-box {
         box-shadow: 0 -2px 9px 0 rgb(238 73 73 / 71%), 0 0px;
-        width: 20%;
+        width: 75%;
         overflow: hidden;
+        margin-bottom: 30px;
       }
+    }
 
-      .cases-iamge {
-        width: 100%;
-        height: 30%;
-      }
+    .home-footer {
+      height: 66px;
+      margin-top: 100px;
+      background: #c12b2b;
+    }
 
-      .case-content-heading {
-        padding-left: 20px;
-        padding-top: 10px;
-        padding-bottom: 10px;
-        font-size: 25px;
-        height: 5%;
-      }
+    .form {
+      background-color: #ffffffaf;
+      width: 100%;
+      max-height: 95%;
+      position: absolute;
+      overflow-x: hidden;
+      overflow-y: auto;
+      margin-bottom: 20px;
+      border: #0000003b solid 1px;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px;
+      border-radius: 12px;
+    }
 
-      .case-content-body {
-        width: 80%;
-        margin: 0% 10% 10% 10%;
-        text-align: justify;
-        overflow-y: auto;
-        max-height: 90%;
-      }
+    .form::-webkit-scrollbar {
+      display: none;
+    }
 
-      .case-content-body::-webkit-scrollbar {
-        width: 5px;
-      }
-
-      .case-content-body::-webkit-scrollbar-track {
-        background: transparent;
-      }
-
-      .case-content-body::-webkit-scrollbar-thumb {
-        background: #888;
-        border-radius: 10px;
-      }
-
-      @media screen and (max-width: 768px) {
-        .case-content {
-          font-size: 25px;
-          width: 60%;
-          font-family: Verdana, sans-serif;
-          padding-left: 20%;
-          color: #aa4949;
-          margin-top: 8%;
-        }
-
-        .cases-container {
-          margin-left: 10%;
-          margin-right: 10%;
-          display: flex;
-          margin-top: 5%;
-          flex-direction: column;
-          align-items: center;
-        }
-
-        .case-box {
-          box-shadow: 0 -2px 9px 0 rgb(238 73 73 / 71%), 0 0px;
-          width: 75%;
-          overflow: hidden;
-          margin-bottom: 30px;
-        }
-      }
-
-      .home-footer {
-        height: 66px;
-        margin-top: 100px;
-        background: #c12b2b;
+    @media screen and (max-width: 768px) {
+      .form-container {
+        width: 70%;
+        z-index: 9;
+        height: 100%;
+        margin-left: 0%;
+        margin-bottom: 10px;
+        position: absolute;
+        display: none;
+        right: 15%;
       }
 
       .form {
-        background-color: #ffffffaf;
-        width: 100%;
-        max-height: 95%;
-        position: absolute;
-        overflow-x: hidden;
-        overflow-y: auto;
-        margin-bottom: 20px;
-        border: #0000003b solid 1px;
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px;
-        border-radius: 12px;
+        max-height: 80%;
+        background-color: #ffffff;
       }
 
       .form::-webkit-scrollbar {
         display: none;
       }
-
-      @media screen and (max-width: 768px) {
-        .form-container {
-          width: 70%;
-          z-index: 9;
-          height: 100%;
-          margin-left: 0%;
-          margin-bottom: 10px;
-          position: absolute;
-          display: none;
-          right: 15%;
-        }
-
-        .form {
-          max-height: 80%;
-          background-color: #ffffff;
-        }
-
-        .form::-webkit-scrollbar {
-          display: none;
-        }
-      }
-
-      .form-heading {
-        display: flex;
-      }
-
-      .form h2 {
-        text-align: center;
-        padding: 10px;
-        width: 1000%;
-        color: #ffffff;
-        font-size: 18px;
-        border-bottom: black solid;
-        border-radius: 7px;
-        margin-top: 0px;
-        box-shadow: #616669 1px 1px 10px 3px;
-        background: #ea03038f;
-      }
-
-      .close-button {
-        position: absolute;
-        font-size: 18px;
-        right: 10px;
-        padding: 10px;
-        cursor: pointer;
-        color: #000000;
-        font-family: Arial;
-        padding-top: 12px;
-      }
-
-      .close-button:hover {
-        color: #ffffff;
-      }
-
-      .form-section {
-        text-align: center;
-        padding-top: 30px;
-        padding-top: 10px;
-        padding-left: 10px;
-        display: grid;
-        margin-left: 0px;
-      }
-
-      .submit-button-container {
-        text-align: center;
-      }
-
-      .submit-button {
-        width: 100px;
-        height: 40px;
-        margin: 20px;
-        border-radius: 10px;
-        box-shadow: #616669 0px 0px 8px 3px;
-        border: none;
-      }
-
-      .input {
-        padding-bottom: 5px;
-      }
-
-      .select-box {
-        width: 100%;
-        border-radius: 7px;
-        height: 30px;
-        padding-left: 10px;
-        border-width: 1px;
-        background-color: rgba(255, 255, 255, 0.658);
-      }
-
-      .input-container {
-        display: flex;
-        align-items: center;
-        margin-left: 10%;
-        margin-right: 10%;
-      }
-
-      .input-box {
-        width: 100%;
-        border-radius: 7px;
-        height: 25px;
-        padding-left: 10px;
-        border-width: 1px;
-        background-color: rgba(218, 231, 233, 0.658);
-      }
-
-      .label-container {
-        display: flex;
-        align-items: center;
-      }
-
-      .label-text {
-        width: 100%;
-        font-family: Times;
-        margin-left: 12%;
-        padding-top: 10px;
-        padding-bottom: 3px;
-        font-size: 20px;
-        text-align: left;
-        margin-right: 10%;
-      }
-
-      .label-container {
-        display: flex;
-        align-items: center;
-      }
-
-      .spinner-container {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
-      }
-
-      .spinner {
-        border: 6px solid #f3f3f3;
-        border-top: 6px solid #3498db;
-        border-radius: 50%;
-        width: 50px;
-        height: 50px;
-        animation: spin 1s linear infinite;
-      }
-
-      @keyframes spin {
-        0% {
-          transform: rotate(0deg);
-        }
-
-        100% {
-          transform: rotate(360deg);
-        }
-      }
-    </style>
-  </head>
-
-  <script>
-    function showSpinner() {
-      document.getElementById("spinner-container").style.display = "flex";
     }
 
-    function hideSpinner() {
-      document.getElementById("spinner-container").style.display = "none";
+    .form-heading {
+      display: flex;
     }
 
-    let showForm = false;
-
-    function handleShowForm() {
-      showForm = true;
-      renderFormContainer();
+    .form h2 {
+      text-align: center;
+      padding: 10px;
+      width: 1000%;
+      color: #ffffff;
+      font-size: 18px;
+      border-bottom: black solid;
+      border-radius: 7px;
+      margin-top: 0px;
+      box-shadow: #616669 1px 1px 10px 3px;
+      background: #ea03038f;
     }
 
-    function handleCloseForm() {
-      showForm = false;
-      renderFormContainer();
+    .close-button {
+      position: absolute;
+      font-size: 18px;
+      right: 10px;
+      padding: 10px;
+      cursor: pointer;
+      color: #000000;
+      font-family: Arial;
+      padding-top: 12px;
     }
 
-    function renderFormContainer() {
-      const formContainer = document.querySelector(".form-container");
-      if (showForm) {
-        formContainer.style.display = "block";
-        formContainer.classList.add("open");
-      } else {
-        formContainer.classList.remove("open");
-        setTimeout(() => {
-          formContainer.style.display = "none";
-        });
+    .close-button:hover {
+      color: #ffffff;
+    }
+
+    .form-section {
+      padding-top: 30px;
+      padding-top: 10px;
+      padding-left: 10px;
+      display: grid;
+      margin-left: 0px;
+    }
+
+    .submit-button-container {
+      text-align: center;
+    }
+
+    .submit-button {
+      width: 100px;
+      height: 40px;
+      margin: 20px;
+      border-radius: 10px;
+      box-shadow: #616669 0px 0px 8px 3px;
+      border: none;
+    }
+
+    .input {
+      padding-bottom: 5px;
+    }
+
+    .select-box {
+      width: 100%;
+      border-radius: 7px;
+      height: 30px;
+      padding-left: 10px;
+      border-width: 1px;
+      background-color: rgba(255, 255, 255, 0.658);
+    }
+
+    .input-container {
+      display: flex;
+      align-items: center;
+      margin-left: 10%;
+      margin-right: 10%;
+    }
+
+    .input-container-span {
+      width: 95%
+    }
+
+    .input-box {
+      width: 100%;
+      border-radius: 7px;
+      height: 25px;
+      padding-left: 10px;
+      border-width: 1px;
+      background-color: rgba(218, 231, 233, 0.658);
+    }
+
+    .validation-message {
+      color: red;
+      font-size: 15px;
+      font-style: italic;
+    }
+
+    .label-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .label-text {
+      width: 100%;
+      font-family: Times;
+      margin-left: 12%;
+      padding-top: 10px;
+      padding-bottom: 3px;
+      font-size: 20px;
+      text-align: left;
+      margin-right: 10%;
+    }
+
+    .label-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .spinner-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .spinner {
+      border: 6px solid #f3f3f3;
+      border-top: 6px solid #3498db;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
       }
     }
+  </style>
+</head>
 
+<script>
+  function showSpinner() {
+    document.getElementById("spinner-container").style.display = "flex";
+  }
+
+  function hideSpinner() {
+    document.getElementById("spinner-container").style.display = "none";
+  }
+
+  let showForm = false;
+
+  function handleShowForm() {
+    showForm = true;
     renderFormContainer();
+  }
 
-    function loadContent(url, containerId) {
-      if (url === "http://127.0.0.1:5000/") {
-        handleCloseForm();
+  function handleCloseForm() {
+    showForm = false;
+    renderFormContainer();
+  }
+
+  function renderFormContainer() {
+    const formContainer = document.querySelector(".form-container");
+    if (showForm) {
+      formContainer.style.display = "block";
+    } else {
+
+      setTimeout(() => {
+        formContainer.style.display = "none";
+      });
+    }
+  }
+
+  renderFormContainer();
+
+  function loadContent(url, containerId) {
+    if (url === "http://127.0.0.1:5000/") {
+      handleCloseForm();
+    }
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+      if (this.readyState == 4 && this.status == 200) {
+        document.getElementById(containerId).innerHTML = this.responseText;
       }
-      var xhttp = new XMLHttpRequest();
-      xhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-          document.getElementById(containerId).innerHTML = this.responseText;
-        }
-      };
-      xhttp.open("GET", url, true);
-      xhttp.send();
-    }
+    };
+    xhttp.open("GET", url, true);
+    xhttp.send();
+  }
 
-    function openHome() {
-      window.location.href = "http://127.0.0.1:5000/";
-    }
-  </script>
+  function openHome() {
+    window.location.href = "http://127.0.0.1:5000/";
+  }
 
-  <body>
-    <div class="header-container">
-      <div>
-        <h1>AnemoProbe</h1>
+
+  // -----------------------------Validations -------------------------------
+
+  // RBC
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const rbcInput = document.getElementById('RBC');
+    const rbcValidationMessage = document.getElementById('RBC-validation-message');
+
+    rbcInput.addEventListener('input', function (event) {
+      const rbcValue = event.target.value;
+      const rbcValue1 = parseFloat(rbcValue);
+
+      if (rbcValue1 < 0.001 || rbcValue1 > 10.000 || isNaN(rbcValue1)) {
+        rbcValidationMessage.textContent = 'RBC value should be between 0.001 and 10.000';
+        event.target.setCustomValidity('Invalid input');
+      } else {
+        rbcValidationMessage.textContent = '';
+        event.target.setCustomValidity('');
+      }
+    });
+  });
+
+  // HGB
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const hgbInput = document.getElementById('HGB');
+    const hgbValidationMessage = document.getElementById('HGB-validation-message');
+
+    hgbInput.addEventListener('input', function (event) {
+      const hgbValue = event.target.value;
+      const hgbValue1 = parseFloat(hgbValue);
+
+      if (hgbValue1 < 0.001 || hgbValue1 > 25.000 || isNaN(hgbValue1)) {
+        hgbValidationMessage.textContent = 'HGB value should be between 0.001 and 25.000';
+        event.target.setCustomValidity('Invalid input');
+      } else {
+        hgbValidationMessage.textContent = '';
+        event.target.setCustomValidity('');
+      }
+    });
+  });
+
+  // HCT
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const hctInput = document.getElementById('HCT');
+    const hctValidationMessage = document.getElementById('HCT-validation-message');
+
+    hctInput.addEventListener('input', function (event) {
+      const hctValue = event.target.value;
+      const hctValue1 = parseFloat(hctValue);
+
+      if (hctValue1 < 5.001 || hctValue1 > 70.000 || isNaN(hctValue1)) {
+        hctValidationMessage.textContent = 'HCT value should be between 5.001 and 70.000';
+        event.target.setCustomValidity('Invalid input');
+      } else {
+        hctValidationMessage.textContent = '';
+        event.target.setCustomValidity('');
+      }
+    });
+  });
+
+  // MCV
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const mcvInput = document.getElementById('MCV');
+    const mcvValidationMessage = document.getElementById('MCV-validation-message');
+
+    mcvInput.addEventListener('input', function (event) {
+      const mcvValue = event.target.value;
+      const mcvValue1 = parseFloat(mcvValue);
+
+      if (mcvValue1 < 40.001 || mcvValue1 > 150.000 || isNaN(mcvValue1)) {
+        mcvValidationMessage.textContent = 'MCV value should be between 40.001 and 150.000';
+        event.target.setCustomValidity('Invalid input');
+      } else {
+        mcvValidationMessage.textContent = '';
+        event.target.setCustomValidity('');
+      }
+    });
+  });
+
+  // MCH
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const mchInput = document.getElementById('MCH');
+    const mchValidationMessage = document.getElementById('MCH-validation-message');
+
+    mchInput.addEventListener('input', function (event) {
+      const mchValue = event.target.value;
+      const mchValue1 = parseFloat(mchValue);
+
+      if (mchValue1 < 10.001 || mchValue1 > 150.000 || isNaN(mchValue1)) {
+        mchValidationMessage.textContent = 'MCH value should be between 10.001 and 150.000';
+        event.target.setCustomValidity('Invalid input');
+      } else {
+        mchValidationMessage.textContent = '';
+        event.target.setCustomValidity('');
+      }
+    });
+  });
+
+  // MCHC
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const mchcInput = document.getElementById('MCHC');
+    const mchcValidationMessage = document.getElementById('MCHC-validation-message');
+
+    mchcInput.addEventListener('input', function (event) {
+      const mchcValue = event.target.value;
+      const mchcValue1 = parseFloat(mchcValue);
+
+      if (mchcValue1 < 15.001 || mchcValue1 > 180.000 || isNaN(mchcValue1)) {
+        mchcValidationMessage.textContent = 'MCHC value should be between 15.001 and 180.000';
+        event.target.setCustomValidity('Invalid input');
+      } else {
+        mchcValidationMessage.textContent = '';
+        event.target.setCustomValidity('');
+      }
+    });
+  });
+
+  // RDW
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const rdwInput = document.getElementById('RDW');
+    const rdwValidationMessage = document.getElementById('RDW-validation-message');
+
+    rdwInput.addEventListener('input', function (event) {
+      const rdwValue = event.target.value;
+      const rdwValue1 = parseFloat(rdwValue);
+
+      if (rdwValue1 < 5.001 || rdwValue1 > 50.000 || isNaN(rdwValue1)) {
+        rdwValidationMessage.textContent = 'RDW value should be between 5.001 and 50.000';
+        event.target.setCustomValidity('Invalid input');
+      } else {
+        rdwValidationMessage.textContent = '';
+        event.target.setCustomValidity('');
+      }
+    });
+  });
+
+  // FOLATE
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const folateInput = document.getElementById('FOLATE');
+    const folateValidationMessage = document.getElementById('FOLATE-validation-message');
+
+    folateInput.addEventListener('input', function (event) {
+      const folateValue = event.target.value;
+      const folateValue1 = parseFloat(folateValue);
+
+      if (folateValue1 < 0.001 || folateValue1 > 75.000 || isNaN(folateValue1)) {
+        folateValidationMessage.textContent = 'FOLATE value should be between 0.001 and 75.000';
+        event.target.setCustomValidity('Invalid input');
+      } else {
+        folateValidationMessage.textContent = '';
+        event.target.setCustomValidity('');
+      }
+    });
+  });
+
+  // B12
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const b12Input = document.getElementById('B12');
+    const b12ValidationMessage = document.getElementById('B12-validation-message');
+
+    b12Input.addEventListener('input', function (event) {
+      const b12Value = event.target.value;
+      const b12Value1 = parseFloat(b12Value);
+
+      if (b12Value1 < 0.001 || b12Value1 > 50000.000 || isNaN(b12Value1)) {
+        b12ValidationMessage.textContent = 'B12 value should be between 0.001 and 50,000.000';
+        event.target.setCustomValidity('Invalid input');
+      } else {
+        b12ValidationMessage.textContent = '';
+        event.target.setCustomValidity('');
+      }
+    });
+  });
+
+</script>
+
+<body>
+  <div class="header-container">
+    <div>
+      <h1>AnemoProbe</h1>
+    </div>
+    <div class="navbar-buttons-container">
+      <nav>
+        <div id="navbarSupportedContent">
+          <button class="btn" onclick="openHome()">Home</button>
+          <button class="btn" onclick="handleShowForm()">Check-Up</button>
+          <a class="btn" href="#" onclick="loadContent('http://127.0.0.1:5000/contactUs','content-container')">Contact
+            us</a>
+        </div>
+      </nav>
+    </div>
+  </div>
+
+  <div class="body-container">
+    <div id="content-container" class="design">
+      <div class="home-heading">ANEMIA</div>
+      <div class="home-content">
+        A very common medical condition in which the red blood cell count or
+        the hemoglobin in the blood is less than normal
       </div>
-      <div class="navbar-buttons-container">
-        <nav>
-          <div id="navbarSupportedContent">
-            <button class="btn" onclick="openHome()">Home</button>
-            <button class="btn" onclick="handleShowForm()">Check-Up</button>
-            <a
-              class="btn"
-              href="#"
-              onclick="loadContent('http://127.0.0.1:5000/contactUs','content-container')"
-              >Contact us</a
-            >
+
+      <div class="home-image1">
+        <img id="home-image-1" src="/static/hi1.png" alt="home-image-1" />
+        <div class="home-image1-content-container">
+          <div class="home-image1-content-heading">Anemia</div>
+          <div class="home-image1-content-body">
+            Anemia is a condition marked by low levels of red blood cells or
+            hemoglobin, vital for oxygen transport. Red blood cells and
+            hemoglobin are crucial for transporting oxygen from the lungs to
+            the body's tissues .
           </div>
-        </nav>
+        </div>
       </div>
+
+      <div class="case-content">Cases on Anemia</div>
+      <div></div>
+
+      <div class="cases-container">
+        <div class="case-box">
+          <img class="cases-iamge" id="home-image-1" src="/static/case1.jpg" alt="home-image-1" />
+          <div class="case-content-heading">Case 1</div>
+          <div class="case-content-body">
+            A 60-year-old male with a history of spanernicious anemia presents
+            with neurological symptoms such as tingling sensations in the
+            hands and feet, along with weakness and difficulty walking.
+            Laboratory tests reveal low hemoglobin and hematocrit levels.
+            Serum vitamin B12 levels are significantly decreased, confirming a
+            diagnosis of vitamin B12 deficiency anemia.
+          </div>
+        </div>
+
+        <div class="case-box">
+          <img class="cases-iamge" id="home-image-1" src="/static/case2.jpg" alt="home-image-1" />
+          <div class="case-content-heading">Case 2</div>
+          <div class="case-content-body">
+            A 35-year-old female presents with fatigue, weakness, and
+            shortness of breath on exertion. She reports heavy menstrual
+            bleeding for several months. Laboratory tests reveal low
+            hemoglobin and hematocrit levels, along with microcytic and
+            hypochromic red blood cells. Iron studies confirm iron deficiency,
+            indicating iron-deficiency anemia secondary to menorrhagia.
+          </div>
+        </div>
+
+        <div class="case-box">
+          <img class="cases-iamge" id="home-image-1" src="/static/case3.jpg" alt="home-image-1" />
+          <div class="case-content-heading">Case 3</div>
+          <div class="case-content-body">
+            A 25-year-old female of African descent presents with jaundice,
+            dark urine, and fatigue. Laboratory tests reveal low hemoglobin
+            and elevated bilirubin levels. Peripheral blood smear shows
+            evidence of hemolysis with schistocytes and spherocytes. Coombs
+            test is positive for autoimmune hemolytic anemia, suggesting an
+            autoimmune etiology.
+          </div>
+        </div>
+      </div>
+
+      <div class="home-footer"></div>
     </div>
 
-    <div class="body-container">
-      <div id="content-container" class="design">
-        <div class="home-heading">ANEMIA</div>
-        <div class="home-content">
-          A very common medical condition in which the red blood cell count or
-          the hemoglobin in the blood is less than normal
+    <div class="form-container">
+      <div class="form">
+        <div class="form-heading">
+          <h2 class="heading">Anemia Check-up</h2>
+          <span class="close-button" onclick="handleCloseForm()">X</span>
         </div>
 
-        <div class="home-image1">
-          <img id="home-image-1" src="/static/hi1.png" alt="home-image-1" />
-          <div class="home-image1-content-container">
-            <div class="home-image1-content-heading">Anemia</div>
-            <div class="home-image1-content-body">
-              Anemia is a condition marked by low levels of red blood cells or
-              hemoglobin, vital for oxygen transport. Red blood cells and
-              hemoglobin are crucial for transporting oxygen from the lungs to
-              the body's tissues .
+        <form id="anemia-form" class="form-section" action="/predict" method="post" enctype="multipart/form-data"
+          onsubmit="showSpinner()">
+          <div class="input">
+            <div class="label-container">
+              <label class="label-text" for="GENDER">Gender:</label>
             </div>
-          </div>
-        </div>
-
-        <div class="case-content">Cases on Anemia</div>
-        <div></div>
-
-        <div class="cases-container">
-          <div class="case-box">
-            <img
-              class="cases-iamge"
-              id="home-image-1"
-              src="/static/case1.jpg"
-              alt="home-image-1"
-            />
-            <div class="case-content-heading">Case 1</div>
-            <div class="case-content-body">
-              A 60-year-old male with a history of spanernicious anemia presents
-              with neurological symptoms such as tingling sensations in the
-              hands and feet, along with weakness and difficulty walking.
-              Laboratory tests reveal low hemoglobin and hematocrit levels.
-              Serum vitamin B12 levels are significantly decreased, confirming a
-              diagnosis of vitamin B12 deficiency anemia.
+            <div class="input-container">
+              <select class="select-box" name="GENDER" id="GENDER" required>
+                <option value="" disabled selected>Select gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select><br />
             </div>
           </div>
 
-          <div class="case-box">
-            <img
-              class="cases-iamge"
-              id="home-image-1"
-              src="/static/case2.jpg"
-              alt="home-image-1"
-            />
-            <div class="case-content-heading">Case 2</div>
-            <div class="case-content-body">
-              A 35-year-old female presents with fatigue, weakness, and
-              shortness of breath on exertion. She reports heavy menstrual
-              bleeding for several months. Laboratory tests reveal low
-              hemoglobin and hematocrit levels, along with microcytic and
-              hypochromic red blood cells. Iron studies confirm iron deficiency,
-              indicating iron-deficiency anemia secondary to menorrhagia.
+          <div class="input">
+            <div class="label-container">
+              <label class="label-text" for="RBC">Red Blood Cell:</label>
+            </div>
+            <div class="input-container">
+              <div class="input-container-span"><input class="input-box" type="number" step="0.001" name="RBC" id="RBC"
+                  required />
+                <span id="RBC-validation-message" class="validation-message"></span>
+              </div>
+              <br />
             </div>
           </div>
 
-          <div class="case-box">
-            <img
-              class="cases-iamge"
-              id="home-image-1"
-              src="/static/case3.jpg"
-              alt="home-image-1"
-            />
-            <div class="case-content-heading">Case 3</div>
-            <div class="case-content-body">
-              A 25-year-old female of African descent presents with jaundice,
-              dark urine, and fatigue. Laboratory tests reveal low hemoglobin
-              and elevated bilirubin levels. Peripheral blood smear shows
-              evidence of hemolysis with schistocytes and spherocytes. Coombs
-              test is positive for autoimmune hemolytic anemia, suggesting an
-              autoimmune etiology.
+
+          <div class="input">
+            <div class="label-container">
+              <label class="label-text" for="HGB">Hemoglobin:</label>
+            </div>
+
+            <div class="input-container">
+              <div class="input-container-span"><input class="input-box" type="number" step="0.001" name="HGB" id="HGB"
+                  required />
+                <span id="HGB-validation-message" class="validation-message"></span>
+              </div>
+              <br />
             </div>
           </div>
-        </div>
 
-        <div class="home-footer"></div>
-      </div>
+          <div class="input">
+            <div class="label-container">
+              <label class="label-text" for="HCT">Hematocrite:</label>
+            </div>
 
-      <div class="form-container">
-        <div class="form">
-          <div class="form-heading">
-            <h2 class="heading">Anemia Check-up</h2>
-            <span class="close-button" onclick="handleCloseForm()">X</span>
+            <div class="input-container">
+              <div class="input-container-span"><input class="input-box" type="number" step="0.001" name="HCT" id="HCT"
+                  required />
+                <span id="HCT-validation-message" class="validation-message"></span>
+              </div>
+              <br />
+            </div>
           </div>
 
-          <form
-            id="anemia-form"
-            class="form-section"
-            action="/predict"
-            method="post"
-            enctype="multipart/form-data"
-            onsubmit="showSpinner()"
-          >
-            <div class="input">
-              <div class="label-container">
-                <label class="label-text" for="GENDER">Gender:</label>
-              </div>
-              <div class="input-container">
-                <select class="select-box" name="GENDER" id="GENDER" required>
-                  <option value="" disabled selected>Select gender</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option></select
-                ><br />
-              </div>
+          <div class="input">
+            <div class="label-container">
+              <label class="label-text" for="MCV">Mean Corpuscular Volume:</label>
             </div>
+            <div class="input-container">
+              <div class="input-container-span"><input class="input-box" type="number" step="0.001" name="MCV" id="MCV"
+                  required />
+                <span id="MCV-validation-message" class="validation-message"></span>
+              </div>
+              <br />
+            </div>
+          </div>
 
-            <div class="input">
-              <div class="label-container">
-                <label class="label-text" for="RBC">Red Blood Cell:</label>
-              </div>
-              <div class="input-container">
-                <input
-                  class="input-box"
-                  type="text"
-                  name="RBC"
-                  id="RBC"
-                  required
-                /><br />
-              </div>
+          <div class="input">
+            <div class="label-container">
+              <label class="label-text" for="MCH">Mean Corpuscular Hemoglobin:</label>
             </div>
+            <div class="input-container">
+              <div class="input-container-span"><input class="input-box" type="number" step="0.001" name="MCH" id="MCH"
+                  required />
+                <span id="MCH-validation-message" class="validation-message"></span>
+              </div>
+              <br />
+            </div>
+          </div>
 
-            <div class="input">
-              <div class="label-container">
-                <label class="label-text" for="HGB">Hemoglobin:</label>
-              </div>
-              <div class="input-container">
-                <input
-                  class="input-box"
-                  type="text"
-                  name="HGB"
-                  id="HGB"
-                  required
-                /><br />
-              </div>
+          <div class="input">
+            <div class="label-container">
+              <label class="label-text" for="MCHC">MCHC:</label>
             </div>
+            <div class="input-container">
+              <div class="input-container-span"><input class="input-box" type="number" step="0.001" name="MCHC"
+                  id="MCHC" required />
+                <span id="MCHC-validation-message" class="validation-message"></span>
+              </div>
+              <br />
+            </div>
+          </div>
 
-            <div class="input">
-              <div class="label-container">
-                <label class="label-text" for="HCT">Hematocrit:</label>
-              </div>
-              <div class="input-container">
-                <input
-                  class="input-box"
-                  type="text"
-                  name="HCT"
-                  id="HCT"
-                  required
-                /><br />
-              </div>
+          <div class="input">
+            <div class="label-container">
+              <label class="label-text" for="RDW">Red Cell Distribution:</label>
             </div>
+            <div class="input-container">
+              <div class="input-container-span"><input class="input-box" type="number" step="0.001" name="RDW" id="RDW"
+                  required />
+                <span id="RDW-validation-message" class="validation-message"></span>
+              </div>
+              <br />
+            </div>
+          </div>
 
-            <div class="input">
-              <div class="label-container">
-                <label class="label-text" for="MCV"
-                  >Mean Corpuscular Volume:</label
-                >
-              </div>
-              <div class="input-container">
-                <input
-                  class="input-box"
-                  type="text"
-                  name="MCV"
-                  id="MCV"
-                  required
-                /><br />
-              </div>
+          <div class="input">
+            <div class="label-container">
+              <label class="label-text" for="FOLATE">Folate level:</label>
             </div>
+            <div class="input-container">
+              <div class="input-container-span"><input class="input-box" type="number" step="0.001" name="FOLATE"
+                  id="FOLATE" required />
+                <span id="FOLATE-validation-message" class="validation-message"></span>
+              </div>
+              <br />
+            </div>
+          </div>
 
-            <div class="input">
-              <div class="label-container">
-                <label class="label-text" for="MCH"
-                  >Mean Corpuscular Hemoglobin:</label
-                >
-              </div>
-              <div class="input-container">
-                <input
-                  class="input-box"
-                  type="text"
-                  name="MCH"
-                  id="MCH"
-                  required
-                /><br />
-              </div>
+          <div class="input">
+            <div class="label-container">
+              <label class="label-text" for="B12">Vitamin B12 level:</label>
             </div>
+            <div class="input-container">
+              <div class="input-container-span"><input class="input-box" type="number" step="0.001" name="B12" id="B12"
+                  required />
+                <span id="B12-validation-message" class="validation-message"></span>
+              </div>
+              <br />
+            </div>
+          </div>
 
-            <div class="input">
-              <div class="label-container">
-                <label class="label-text" for="MCHC">MCHC:</label>
-              </div>
-              <div class="input-container">
-                <input
-                  class="input-box"
-                  type="text"
-                  name="MCHC"
-                  id="MCHC"
-                  required
-                /><br />
-              </div>
-            </div>
-
-            <div class="input">
-              <div class="label-container">
-                <label class="label-text" for="RDW"
-                  >Red Cell Distribution:</label
-                >
-              </div>
-              <div class="input-container">
-                <input
-                  class="input-box"
-                  type="text"
-                  name="RDW"
-                  id="RDW"
-                  required
-                /><br />
-              </div>
-            </div>
-
-            <div class="input">
-              <div class="label-container">
-                <label class="label-text" for="FOLATE">Folate level:</label>
-              </div>
-              <div class="input-container">
-                <input
-                  class="input-box"
-                  type="text"
-                  name="FOLATE"
-                  id="FOLATE"
-                  required
-                /><br />
-              </div>
-            </div>
-
-            <div class="input">
-              <div class="label-container">
-                <label class="label-text" for="B12">Vitamin B12 level:</label>
-              </div>
-              <div class="input-container">
-                <input
-                  class="input-box"
-                  type="text"
-                  name="B12"
-                  id="B12"
-                  required
-                /><br />
-              </div>
-            </div>
-
-            <br />
-            <div class="submit-button-container">
-              <input class="submit-button" type="submit" value="submit" />
-            </div>
-          </form>
-        </div>
+          <br />
+          <div class="submit-button-container">
+            <input class="submit-button" type="submit" value="submit" />
+          </div>
+        </form>
       </div>
     </div>
+  </div>
 
-    <div class="spinner-container" id="spinner-container" style="display: none">
-      <div class="spinner"></div>
-    </div>
-  </body>
+  <div class="spinner-container" id="spinner-container" style="display: none">
+    <div class="spinner"></div>
+  </div>
+</body>
+
 </html>
