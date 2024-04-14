@@ -108,7 +108,6 @@ def predict():
     stacked_predictions = stacking_ensemble(rf_model, gb_model, meta_model, X_train, y_train, user_data)
 
     all_class_value = str(stacked_predictions.iloc[:, :-1].values.argmax(axis=1)[0])
-    print(all_class_value)
     
     return render_template('result.html', predicted_class=all_class_value)
 
