@@ -43,11 +43,28 @@
             height: 30px;
             border-radius: 5px;
         }
+
+        @media screen and (max-width: 768px) {
+            .heading-section {
+                margin-top: 20%;
+                text-align: center;
+            }
+
+            .details-conatiner {
+                flex-direction: column;
+
+            }
+
+            .details-box {
+                width: auto;
+                margin-top: 10%;
+            }
+        }
     </style>
 </head>
 
 <body>
-    <h2 class="heading-section">contact Us</h2>
+    <h2 class="heading-section">Contact Us</h2>
     <div class="details-conatiner">
         <div class="details-box">
             <div><strong style="font-size: 20px;">Have a technical question?</strong></div>
@@ -63,6 +80,8 @@
             <button class="email-button" onclick="openEmailComposerFeedback()">Give feedback!</button>
         </div>
     </div>
+
+    <div class="home-footer"></div>
 </body>
 
 </html>
