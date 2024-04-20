@@ -5,6 +5,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Prediction</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var rbc = "{{rbc}}";
+        var hgb = "{{hgb}}"
+        var hct = "{{hct}}"
+        var mcv = "{{mcv}}"
+        var mch = "{{mch}}"
+        var mchc = "{{mchc}}"
+        var rdw = "{{rdw}}"
+        var folate = "{{folate}}"
+        var b12 = "{{b12}}" 
+    </script>
     <style>
         .main {
             position: relative;
@@ -110,21 +122,27 @@
         }
 
         .body-container-left {
-            width: 60%;
+            width: 1000%;
             display: flex;
             flex-direction: column;
-            align-items: center;
+        }
+
+        .image-text-container {
+            display: flex;
+            gap: 15px;
         }
 
         .result-container {
-            width: 100%;
+            width: auto;
             display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            height: 250px;
+            margin: 5%;
         }
 
-
         .result-box {
-            height: 100%;
-            margin: 7% 5% 0% 20%;
+            height: 25%;
         }
 
         .bar {
@@ -135,18 +153,29 @@
         }
 
         .result-text {
-            margin-top: 10%;
             margin-bottom: 0%;
             height: 10%;
             margin-left: 5%;
+            text-align: center;
+        }
+
+        .result-answer-container {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
         }
 
         .result-answer {
-            margin-top: 5%;
-            margin-left: 5%;
-            font-size: 30px;
-            align-content: center;
-            font-style: italic;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+        }
+
+        .graphContainer {
+            width: 500px;
+            height: 300px;
         }
 
         @media screen and (max-width: 768px) {
@@ -221,28 +250,124 @@
                     <h1>Result</h1>
                 </div>
                 <div class="result-container">
-                    <div class="result-box">
-                        <!-- <p>{{predicted_class}}</p> -->
-                        <img id="result-image"
-                            src="{% if predicted_anemia == 0 %}/static/healthy.png{% else %}/static/Anemic.png{% endif %}"
-                            alt="Result Image" />
+                    <div class="image-text-container">
+                        <div class="result-box">
+                            <!-- <p>{{predicted_class}}</p> -->
+                            <img id="result-image"
+                                src="{% if predicted_anemia == 0 %}/static/healthy.png{% else %}/static/Anemic.png{% endif %}"
+                                alt="Result Image" />
+                        </div>
+                        <div class="result-answer-container">
+                            <div class="bar"></div>
+                            <div class="result-answer">{% if predicted_class == 0 %}
+                                Non-Anemic
+                                {% elif predicted_class == 1 %}
+                                <span>Hemoglobin Deficiency</span> <br />Anemic
+                                {% elif predicted_class == 2 %}
+                                <span>Iron Deficiency</span> <br />Anemic
+                                {% elif predicted_class == 3 %}
+                                Folate Anemic
+                                {% elif predicted_class == 4 %}
+                                <span>Vitamin B12 Deficiency</span>
+                                <br />
+                                <span>Anemic</span>
+                                {% endif %}
+                            </div>
+                        </div>
                     </div>
-                    <div class="bar"></div>
-                    <div class="result-answer">{% if predicted_class == 0 %}
-                        Non-Anemic
-                        {% elif predicted_class == 1 %}
-                        <span>Hemoglobin Deficiency</span> <br />Anemic
-                        {% elif predicted_class == 2 %}
-                        <span>Iron Deficiency</span> <br />Anemic
-                        {% elif predicted_class == 3 %}
-                        Folate Anemic
-                        {% elif predicted_class == 4 %}
-                        <span>Vitamin B12 Deficiency</span>
-                        <br />
-                        <span>Anemic</span>
-                        {% endif %}
+                    <div class="graphContainer">
+                        <canvas id="anemiaGraph"></canvas>
                     </div>
 
+                    <script>
+                        // Data for the graph
+                        var data = {
+                            labels: ["RBC", "HGB", "HCT", "MCV", "MCH", "MCHC", "RDW", "Folate"],
+                            datasets: [{
+                                label: "Healthy value",
+                                backgroundColor: "#31BBCA",
+                                borderColor: "#31BBCA",
+                                borderWidth: 2,
+                                data: [
+                                    [3.8, 6.0], // RBC range 
+                                    [12, 17.2], // HGB range
+                                    [34.9, 50.0], // HCT range
+                                    [80, 100], // MCV range
+                                    [27, 32], // MCH range
+                                    [32, 36], // MCHC range
+                                    [11.5, 14.5], // RDW range
+                                    [2.7, 17.0], // Folate range
+                                ],
+                            },
+                            {
+                                label: "Your value",
+                                backgroundColor: "rgba(255, 99, 132, 0.2)",
+                                borderColor: "rgba(255, 99, 132, 1)",
+                                borderWidth: 1,
+                                data: [
+                                    [0, rbc], // RBC range
+                                    [0, hgb], // HGB range
+                                    [0, hct], // HCT range
+                                    [0, mcv], // MCV range
+                                    [0, mch], // MCH range
+                                    [0, mchc], // MCHC range
+                                    [0, rdw], // RDW range
+                                    [0, folate] // Folate range
+                                ],
+                            }
+                            ]
+                        };
+
+                        // Options for the graph
+                        var options = {
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    grid: {
+                                        display: false
+                                    },
+                                    ticks: {
+                                        stepSize: 10,
+                                        min: 0,
+                                        max: 100
+                                    }
+                                },
+                                x: {
+                                    grid: {
+                                        display: false // Hide x-axis grid lines
+                                    }
+                                }
+                            },
+                            plugins: {
+                                tooltip: {
+                                    callbacks: {
+                                        label: function (context) {
+                                            var label = context.dataset.label || '';
+                                            var value = context.parsed.y;
+                                            if (context.dataset.label === "Healthy value") {
+                                                var lowerValue = context.dataset.data[context.dataIndex][0];
+                                                var upperValue = context.dataset.data[context.dataIndex][1];
+                                                label += ': ' + lowerValue + ' - ' + upperValue;
+                                            } else {
+                                                label += ': ' + context.dataset.data[context.dataIndex][1];
+                                            }
+                                            return label;
+                                        }
+                                    }
+                                }
+                            }
+                        };
+
+                        var ctx = document.getElementById("anemiaGraph").getContext("2d");
+                        ctx.canvas.style.backgroundColor = 'rgba(255, 255, 255, 0.62)';
+
+                        // Create the chart
+                        var myChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: data,
+                            options: options
+                        });
+                    </script>
 
                 </div>
             </div>
