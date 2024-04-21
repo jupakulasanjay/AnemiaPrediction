@@ -62,7 +62,7 @@ def predict():
     combined_predictions = (predictions_rf + predictions_gb + dnn_predictions) / 3.0
     predicted_anemia = np.round(combined_predictions)
     predicted_class = (predictions_rf)
-    return render_template('result.html', predicted_anemia=predicted_anemia, predicted_class=predicted_class, predicted_anemia_dl=dnn_predictions)
+    return render_template('result.html', predicted_anemia=predicted_anemia, predicted_class=predicted_class, predicted_anemia_dl=dnn_predictions, rbc= user_input['RBC'], hgb= user_input['HGB'], hct= user_input['HCT'], mcv= user_input['MCV'], mch= user_input['MCH'], mchc= user_input['MCHC'], rdw= user_input['RDW'], folate= user_input['FOLATE'], b12= user_input['B12'])
 
 def predict_Dlresult(user_input):    
     filename = "./uploads/uploaded_file.csv"

@@ -4,12 +4,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>contact Us Page</title>
+    <title>Contact Us</title>
+
+    <style>
+        .heading-section {
+            padding-left: 5%;
+            font-size: 40px;
+        }
+
+        .details-conatiner {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            margin: 5% 10%;
+            margin-bottom: 1%;
+        }
+
+        .details-box {
+            display: flex;
+            border: solid;
+            background: white;
+            width: 35%;
+            border-radius: 25px;
+            height: 250px;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .email-text {
+            padding: 0px 30px;
+            text-align: center;
+        }
+
+        .email-button {
+            color: white;
+            background: #e65757;
+            height: 30px;
+            border-radius: 5px;
+        }
+
+        @media screen and (max-width: 768px) {
+            .heading-section {
+                margin-top: 20%;
+                text-align: center;
+            }
+
+            .details-conatiner {
+                flex-direction: column;
+
+            }
+
+            .details-box {
+                width: auto;
+                margin-top: 10%;
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <h2>contact Us Page</h2>
-    <p>This is a sample contact Us page. You can put your information here.</p>
+    <h2 class="heading-section">Contact Us</h2>
+    <div class="details-conatiner">
+        <div class="details-box">
+            <div><strong style="font-size: 20px;">Have a technical question?</strong></div>
+            <div class="email-text">Please write us to the following email address provided below, including any
+                relevant details or
+                attachments necessary for assistance. Thank you!</div>
+            <button class="email-button" onclick="openEmailComposerSupport()">Contact Support</button>
+        </div>
+        <div class="details-box">
+            <div><strong style="font-size: 20px;">Have a suggestion for us?</strong></div>
+            <div class="email-text">Let's nurture each other's growth by sharing your thoughts with us. Kindly send your
+                feedback to the following email address</div>
+            <button class="email-button" onclick="openEmailComposerFeedback()">Give feedback!</button>
+        </div>
+    </div>
+
+    <div class="home-footer"></div>
 </body>
 
 </html>
