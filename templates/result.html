@@ -15,21 +15,18 @@
         var mchc = "{{mchc}}"
         var rdw = "{{rdw}}"
         var folate = "{{folate}}"
-        var b12 = "{{b12}}" 
+        var b12 = "{{b12}}"
+        var pc = "{{predicted_class}}"
     </script>
     <style>
-        .main {
-            position: relative;
-            height: 100vh;
-            width: 100%;
+        body {
             background-image: url("/static/bg1.png");
             background-size: cover;
-            background-position: center;
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: -1;
-            overflow-y: auto;
+            background-position: top;
+            background-repeat: no-repeat;
+            max-width: 100%;
+            max-height: 600px;
+            overflow-x: hidden;
         }
 
         .header-container {
@@ -116,15 +113,16 @@
         /* 7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777 */
 
         .body-container {
-            height: 85%;
+            height: auto;
             width: 100%;
             display: flex;
         }
 
         .body-container-left {
-            width: 1000%;
+            width: 100%;
             display: flex;
             flex-direction: column;
+            align-items: center;
         }
 
         .image-text-container {
@@ -136,17 +134,18 @@
             width: auto;
             display: flex;
             flex-direction: row;
-            justify-content: space-around;
+            gap: 200px;
             height: 250px;
             margin: 5%;
         }
 
         .result-box {
-            height: 25%;
+            height: 100%;
+            display: flex;
         }
 
         .bar {
-            width: 0.5%;
+            width: 1.5%;
             background-color: black;
             height: 90%;
             margin-top: 5%;
@@ -168,40 +167,198 @@
         .result-answer {
             width: 100%;
             display: flex;
+            font-size: 20px;
             flex-direction: column;
             align-items: flex-start;
             justify-content: center;
         }
 
+        .info-container {
+            width: 600px;
+            height: auto;
+            background-image: url(/static/infoc1.png);
+            background-size: cover;
+            background-position: center;
+            color: #1c1212;
+            font-family: 'Times New Roman', serif;
+            border-radius: 15px;
+            padding: 38px;
+            margin-top: 70px;
+            box-shadow: 0 0px 30px 0 rgba(0, 0, 0, 0.3);
+        }
+
+
+
+
         .graphContainer {
-            width: 500px;
-            height: 300px;
+            width: auto;
+            height: 250px;
+            display: flex;
+            border: white solid;
+        }
+
+        .b12-container {
+            width: 60px;
+            background: #ffffff9e;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .b12-graph {
+            display: flex;
+            height: 193px;
+            flex-direction: row;
+            justify-content: center;
+            padding-top: 30px;
+        }
+
+        .b12-normal {
+            height: 100%;
+            background: #31BBCA;
+            width: 20px
+        }
+
+        .b12-normal-text {
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .b12-input {
+            height: 100%;
+            background: rgb(255 99 132 / 39%);
+            width: 20px;
+            border: 1.5px rgb(255 99 132) solid;
+            border-top: none;
+            writing-mode: vertical-rl;
+            font-size: 12px;
+            text-align: center;
+            transform: rotate(180deg);
+        }
+
+        .b12-input-text {
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+        }
+
+        .b12-name {
+            height: 10px;
+            text-align: center;
+            font-size: 11px;
+            color: #735656;
+            font-family: Tahoma, sans-serif;
+            padding-top: 10px;
+            padding-bottom: 8px;
+        }
+
+
+        .home-footer {
+            height: 66px;
+            margin-top: 100px;
+            background: #c12b2b;
         }
 
         @media screen and (max-width: 768px) {
+            body {
+                max-height: 100px;
+            }
+
             .result-container {
                 width: 100%;
                 display: flex;
                 flex-direction: column;
+                align-items: center;
+                gap: 70px;
+                height: auto;
             }
 
             .result-text {
-                margin-top: 10%;
-                margin-bottom: 0%;
                 height: 10%;
-                margin-left: 55%;
+                margin-left: 0%;
                 font-size: 20px;
                 margin-bottom: 20px;
+                margin-top: 14%;
             }
 
             .result-answer {
-                margin-top: 75%;
-                margin-left: 25%;
                 font-size: 30px;
-                align-content: center;
                 position: absolute;
                 font-style: italic;
+                width: auto;
             }
+
+            .image-text-container {
+                display: flex;
+                gap: 15px;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .result-answer-container {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                align-items: center;
+            }
+
+            .graphContainer {
+                width: 300px;
+                height: 250px;
+                display: flex;
+                border: white solid;
+                flex-direction: column;
+                align-items: center;
+                background: #c9dc79;
+            }
+
+            .b12-container {
+                width: 300px;
+                background: #ffffff9e;
+                height: auto;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .b12-graph {
+                display: flex;
+                height: 40px;
+                flex-direction: column;
+                justify-content: center;
+                padding-top: 30px;
+            }
+
+            .b12-normal {
+                height: 20px;
+                background: #31BBCA;
+                width: 200px;
+            }
+
+            .b12-normal-text {
+                writing-mode: horizontal-tb;
+                transform: rotate(269deg);
+                text-align: center;
+                font-size: 11px;
+            }
+
+            .b12-input {
+                writing-mode: horizontal-tb;
+                width: 200px;
+                transform: rotate(0deg);
+                font-size: 11px;
+                height: 20px;
+                display: flex;
+                align-items: center;
+            }
+
+            .info-container {
+                width: 250px;
+                padding-top: 90px;
+                padding-bottom: 90px;
+            }
+
         }
     </style>
 </head>
@@ -254,29 +411,39 @@
                         <div class="result-box">
                             <!-- <p>{{predicted_class}}</p> -->
                             <img id="result-image"
-                                src="{% if predicted_anemia == 0 %}/static/healthy.png{% else %}/static/Anemic.png{% endif %}"
+                                src="{% if predicted_anemia == 0 %}/static/healthy_1.png{% else %}/static/Anemic_2.png{% endif %}"
                                 alt="Result Image" />
                         </div>
                         <div class="result-answer-container">
                             <div class="bar"></div>
                             <div class="result-answer">{% if predicted_class == 0 %}
-                                Non-Anemic
+                                <i><strong>Non-Anemic</strong></i>
                                 {% elif predicted_class == 1 %}
-                                <span>Hemoglobin Deficiency</span> <br />Anemic
+                                <i><strong>Hemoglobin Anemia</strong></i>
                                 {% elif predicted_class == 2 %}
-                                <span>Iron Deficiency</span> <br />Anemic
+                                <i><strong>Iron Anemia</strong></i>
                                 {% elif predicted_class == 3 %}
-                                Folate Anemic
+                                <i><strong>Folate Anemia</strong></i>
                                 {% elif predicted_class == 4 %}
-                                <span>Vitamin B12 Deficiency</span>
-                                <br />
-                                <span>Anemic</span>
+                                <i><strong>Vitamin B12 Anemia</strong></i>
                                 {% endif %}
                             </div>
                         </div>
                     </div>
                     <div class="graphContainer">
                         <canvas id="anemiaGraph"></canvas>
+                        <div class="b12-container">
+                            <div class="b12-graph">
+                                <div id="b12-normal-id" class="b12-normal"><span class="b12-normal-text">Vit B12 Healthy
+                                        value 200 -
+                                        900</span></div>
+                                <div id="b12-input-id" class="b12-input"><span class="b12-normal-text"> </div>
+                            </div>
+                            <div class="b12-name"> Vit B12</div>
+                        </div>
+                        <script>
+                            document.getElementById('b12-input-id').innerHTML = "Vit B12 Your value " + b12;
+                        </script>
                     </div>
 
                     <script>
@@ -369,9 +536,40 @@
                         });
                     </script>
 
+
                 </div>
+                <div id="info-container-main" class="info-container"><span id="info-container-id1"></span> <br />
+                    <br /><span id="info-container-id2"></span>
+                </div>
+                <script>
+
+                    var info_main = document.getElementById('info-container-main');
+
+                    console.log(pc);
+                    if (pc === '1') {
+                        document.getElementById('info-container-id1').innerHTML = "Hemoglobin anemia, also known simply as anemia, is a medical condition characterized by a deficiency in the number of red blood cells or the amount of hemoglobin in the blood. Hemoglobin is a protein found in red blood cells that carries oxygen from the lungs to the rest of the body. When hemoglobin levels are low, tissues and organs may not receive an adequate supply of oxygen, leading to symptoms such as fatigue, weakness, shortness of breath, and pale skin. There are several types of anemia, each with its own underlying cause, including iron deficiency anemia, vitamin deficiency anemia (such as vitamin B12 or folate deficiency), chronic diseases, genetic disorders, and certain medications or treatments.                                                       ";
+                        document.getElementById('info-container-id2').innerHTML = "Certain lifestyle factors such as excessive blood loss due to menstruation, gastrointestinal bleeding, or pregnancy can contribute to the development of anemia. To prevent or manage hemoglobin anemia, it's important to maintain a balanced diet rich in iron, vitamins, and minerals, and to address any underlying health conditions that may be contributing to the anemia. Regular exercise, adequate sleep, and stress management can also support overall health and well-being, which may help prevent anemia or reduce its severity. In cases of diagnosed anemia, following the treatment plan prescribed by a healthcare provider is essential. Treatment may include dietary changes, iron supplementation, vitamin injections, medications to stimulate red blood cell production, or other interventions depending on the underlying cause and severity of the anemia."
+                    } else if (pc === '2') {
+                        document.getElementById('info-container-id1').innerHTML = "Iron deficiency anemia occurs when the body lacks a sufficient amount of iron to produce hemoglobin, the protein in red blood cells that carries oxygen to tissues throughout the body. Iron deficiency can develop due to several reasons, including inadequate dietary intake of iron-rich foods, poor absorption of iron from the diet, blood loss from menstruation or gastrointestinal bleeding, or increased iron requirements during pregnancy or growth spurts. Without enough iron, the body cannot produce an adequate amount of hemoglobin, leading to symptoms such as fatigue, weakness, pale skin, shortness of breath, and rapid heartbeat.";
+                        document.getElementById('info-container-id2').innerHTML = "To prevent iron deficiency anemia, individuals should consume a diet rich in iron-containing foods such as red meat, poultry, fish, beans, lentils, tofu, spinach, and fortified cereals. Consuming vitamin C-rich foods alongside iron-rich foods can enhance iron absorption. Additionally, individuals at risk for iron deficiency, such as pregnant women and menstruating individuals, may benefit from iron supplementation under the guidance of a healthcare professional. If diagnosed with iron deficiency anemia, healthcare providers may recommend iron supplements to replenish iron stores and improve hemoglobin levels. It's essential to follow healthcare provider instructions regarding dosage and duration of iron supplementation to avoid side effects and ensure optimal treatment outcomes. Regular monitoring of hemoglobin levels and iron status is also important to assess the effectiveness of treatment and adjust therapy as needed.";
+
+                    } else if (pc === '3') {
+                        document.getElementById('info-container-id1').innerHTML = "Folate anemia, also known as folate deficiency anemia, is a condition characterized by a lack of folate, a B vitamin essential for the production of red blood cells. Without an adequate supply of folate, the body is unable to produce enough healthy red blood cells, leading to anemia. Folate anemia can manifest with symptoms such as fatigue, weakness, pale skin, shortness of breath, and difficulty concentrating. It is particularly common in individuals with poor dietary intake of folate-rich foods, such as leafy green vegetables, citrus fruits, beans, and fortified cereals.";
+                        document.getElementById('info-container-id2').innerHTML = "The primary cause of folate anemia is a deficiency of dietary folate intake, although it can also result from factors such as malabsorption, alcoholism, certain medications (e.g., methotrexate), and certain medical conditions (e.g., celiac disease). To prevent folate anemia, it is important to consume a balanced diet rich in folate-containing foods and, if necessary, take folate supplements as recommended by a healthcare professional. Additionally, individuals with conditions or lifestyle factors that may increase their risk of folate deficiency should undergo regular monitoring of their folate levels and adjust their dietary and supplementation regimen accordingly. Treatment of folate anemia typically involves oral folate supplementation to correct the deficiency and alleviate symptoms. In severe cases or when malabsorption is a contributing factor, folate may be administered intravenously under medical supervision. However, it is important to consult with a healthcare provider for personalized recommendations and guidance regarding the management of folate anemia.";
+
+                    } else if (pc === '4') {
+                        document.getElementById('info-container-id1').innerHTML = "Vitamin B12 anemia, also known as megaloblastic anemia, occurs when the body lacks sufficient vitamin B12 to produce healthy red blood cells. Vitamin B12 is essential for the formation of red blood cells and the maintenance of the nervous system. Anemia develops when there is a deficiency of this vitamin, leading to the production of abnormally large and immature red blood cells. Symptoms of vitamin B12 anemia may include fatigue, weakness, pale or jaundiced skin, shortness of breath, tingling or numbness in the hands and feet, and difficulty concentrating. If left untreated, it can lead to more severe complications such as neurological damage.";
+                        document.getElementById('info-container-id2').innerHTML = "Vitamin B12 anemia can be caused by various factors, including inadequate dietary intake of vitamin B12 (commonly found in animal products), malabsorption disorders such as pernicious anemia or gastrointestinal surgery that affects the absorption of vitamin B12, and certain medications that interfere with vitamin B12 absorption. Individuals at risk of developing vitamin B12 anemia include vegetarians, older adults, individuals with gastrointestinal disorders, and those with a family history of the condition. To prevent vitamin B12 anemia, it is essential to consume an adequate amount of vitamin B12 through diet or supplements, especially for individuals at risk. Additionally, regular screening for vitamin B12 deficiency and addressing underlying causes such as malabsorption disorders are crucial for early detection and management.";
+
+                    } else {
+                        info_main.style.display = 'none';
+                    }
+                </script>
+
             </div>
+
         </div>
+        <div class="home-footer"></div>
     </div>
     </div>
 </body>
