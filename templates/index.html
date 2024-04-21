@@ -568,6 +568,22 @@
     renderFormContainer();
   }
 
+  function openEmailComposerSupport() {
+    var recipientEmail = 'manirevu2002@gmail.com';
+    var subject = 'Technical Support Inquiry';
+    var body = 'Dear Support Team, ';
+    var mailtoLink = 'mailto:' + recipientEmail + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+    window.location.href = mailtoLink;
+  }
+
+  function openEmailComposerFeedback() {
+    var recipientEmail = 'manirevu2002@gmail.com';
+    var subject = 'Technical Support Feedback';
+    var body = 'Dear Support Team, ';
+    var mailtoLink = 'mailto:' + recipientEmail + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+    window.location.href = mailtoLink;
+  }
+
   function renderFormContainer() {
     const formContainer = document.querySelector(".form-container");
     if (showForm) {
