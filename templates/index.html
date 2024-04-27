@@ -310,7 +310,6 @@
     .case-content-body {
       width: 80%;
       margin: 0% 10% 10% 10%;
-      text-align: justify;
       overflow-y: auto;
       max-height: 90%;
     }
@@ -599,21 +598,22 @@
   renderFormContainer();
 
   function loadContent(url, containerId) {
-    if (url === "http://127.0.0.1:5000/") {
+    if (url === "/") {
       handleCloseForm();
     }
+    handleCloseForm();
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
       if (this.readyState == 4 && this.status == 200) {
         document.getElementById(containerId).innerHTML = this.responseText;
       }
     };
-    xhttp.open("GET", url, true);
+    xhttp.open("GET", "/contactUs", true);
     xhttp.send();
   }
 
   function openHome() {
-    window.location.href = "http://127.0.0.1:5000/";
+    window.location.href = "/";
   }
 
 
@@ -802,8 +802,7 @@
         <div id="navbarSupportedContent">
           <button class="btn" onclick="openHome()">Home</button>
           <button class="btn" onclick="handleShowForm()">Check-Up</button>
-          <a class="btn" href="#" onclick="loadContent('http://127.0.0.1:5000/contactUs','content-container')">Contact
-            us</a>
+          <a class="btn" href="#" onclick="loadContent('http://localhost:5000/contactUs','content-container')">Contact us</a>
         </div>
       </nav>
     </div>
