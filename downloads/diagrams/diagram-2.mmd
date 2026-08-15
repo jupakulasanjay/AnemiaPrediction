@@ -1,0 +1,42 @@
+flowchart LR
+    subgraph PORTAL["PORTAL — We build"]
+        direction TB
+        P1[Travel request form]
+        P2[Approval workflow]
+        P3[Travel desk queue]
+        P4[Traveler profiles]
+        P5[Structured options display]
+        P6[Selection and policy checks]
+        P7[Itinerary and documents]
+        P8[Dashboards and audit trail]
+        P1 --> P2 --> P3 --> P5 --> P6 --> P7 --> P8
+        P4 -.->|auto-fill| P1
+        P4 -.->|auto-apply| P7
+    end
+
+    subgraph DESK["TRAVEL DESK — Venture Plus"]
+        direction TB
+        D1[Review approved request]
+        D2[Advise on best option]
+        D3[Publish options to portal]
+        D4[Confirm booking intent]
+        D5[Upload tickets and vouchers]
+        D1 --> D2 --> D3 --> D4 --> D5
+    end
+
+    subgraph AGENCY["AGENCY VENDOR — External"]
+        direction TB
+        A1[Search GDS / agency platform]
+        A2[Access corporate rates]
+        A3[Issue tickets]
+        A4[Book hotels and vouchers]
+        A5[Pay suppliers on credit terms]
+        A1 --> A2 --> A3 --> A4 --> A5
+    end
+
+    P3 -->|approved request| D1
+    D3 -->|options| P5
+    P6 -->|selected option| D4
+    D4 -->|book| A1
+    A3 & A4 -->|tickets/vouchers| D5
+    D5 -->|attach| P7

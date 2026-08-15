@@ -1,0 +1,9 @@
+flowchart TD
+    A[Chris approves] --> B[Options presented]
+    B --> C[Select AED 4,100 fare]
+    C --> D[Over band flagged]
+    D --> E[HR notified]
+    E --> F{Chris reconfirms?}
+    F -->|No| G([On hold])
+    F -->|Yes| H[Rationale documented]
+    H --> I[Agency books]

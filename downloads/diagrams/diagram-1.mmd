@@ -1,0 +1,41 @@
+flowchart TD
+    START([Employee needs to travel]) --> FORM[Submit individual travel request]
+    FORM --> MGR{Manager approval}
+    MGR -->|Rejected| REJ([Request rejected])
+    MGR -->|Approved| CHRIS{Chris final approval}
+    CHRIS -->|Rejected| REJ
+    CHRIS -->|Approved| NOTIFY[Notify Venture Plus desk + HR<br/>travel@specserve.com]
+
+    NOTIFY --> VISA{Visa required?}
+
+    VISA -->|Yes| VLOCK[BOOKING LOCKED]
+    VLOCK --> VCHECK[Traveler: Travel Hub checklist + upload docs]
+    VCHECK --> VHR[HR: NOC + salary certificate]
+    VHR --> VDESK[Venture Plus: verify docs vs visa matrix]
+    VDESK --> VSTATUS{Visa approved?}
+    VSTATUS -->|No| VLOCK
+    VSTATUS -->|Yes| UNLOCK[Booking unlocked]
+
+    VISA -->|No| UNLOCK
+
+    UNLOCK --> DESK[Travel desk picks up request]
+    DESK --> PROFILE[Load traveler profile]
+    PROFILE --> SEARCH[Agency searches inventory — outside platform]
+    SEARCH --> OPTIONS[Desk publishes structured options in portal]
+
+    OPTIONS --> SELECT[Employee or desk selects option]
+    SELECT --> BAND{Within cost band?}
+
+    BAND -->|No| FLAG[Flag over-band to HR]
+    FLAG --> RECONFIRM{Chris reconfirms?}
+    RECONFIRM -->|No| HOLD([Booking on hold])
+    RECONFIRM -->|Yes| BOOK
+    BAND -->|Yes| BOOK
+
+    BOOK[Agency executes booking — outside platform]
+    BOOK --> PREFS[Apply preferences: seat, meal, loyalty]
+    PREFS --> CONFIRM[Portal: confirmed + documents attached]
+    CONFIRM --> ITIN[Trip-named itinerary issued]
+    ITIN --> NOTIFY2[Notify traveler + HR]
+    NOTIFY2 --> DASH[Update dashboards + traveler tracker]
+    DASH --> END([Complete])

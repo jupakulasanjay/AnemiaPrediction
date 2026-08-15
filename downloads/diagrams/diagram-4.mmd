@@ -1,0 +1,11 @@
+flowchart TD
+    A[Submit + visa flag] --> B[Chris approves]
+    B --> C[BOOKING LOCKED]
+    C --> D[Traveler uploads docs]
+    D --> E[HR: NOC + salary cert]
+    E --> F[Desk verifies vs matrix]
+    F --> G{Visa approved?}
+    G -->|No| C
+    G -->|Yes| H[Booking unlocked]
+    H --> I[Options presented]
+    I --> J[Agency books]
