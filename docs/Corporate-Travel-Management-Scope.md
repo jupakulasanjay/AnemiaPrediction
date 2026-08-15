@@ -627,48 +627,7 @@ The following are explicitly **out of scope** for the platform. They remain with
 
 ---
 
-## 7. Open Questions
-
-These are meaningful decisions still needed before or during build.
-
-### 7.1 Scope and platform boundaries
-
-| # | Question | Why it matters |
-|---|----------|----------------|
-| 1 | Does the platform replace the Centurion travel form, or integrate with it? | Centurion currently handles requests; external portal is being considered |
-| 2 | Full flow (request → approval → booking) or start at approved-request stage only? | Determines build size |
-| 3 | Is manager approval shown in the workflow, or only Chris as final approver? | Affects approval screen design |
-| 4 | Include GL code field on the form now, or defer until finance ownership is agreed? | Finance and HR disagree on who owns GL codes |
-
-### 7.2 Booking and agency integration
-
-| # | Question | Why it matters |
-|---|----------|----------------|
-| 5 | Who is Venture Plus's travel agency partner for production? | Required for live booking execution |
-| 6 | Will rates come from the agency's corporate system or from public/online sources? | Affects how options are sourced and presented |
-| 7 | v1 manual desk entry vs agency API integration — which path first? | Determines integration effort |
-| 8 | Does the agency system expose a search/book API, or is all booking manual in their platform? | Determines v2 integration feasibility |
-
-### 7.3 Commercial and finance
-
-| # | Question | Why it matters |
-|---|----------|----------------|
-| 9 | What credit terms model applies with the agency (deposit, cap, call-off PO)? | Affects whether bookings can be blocked by credit limits |
-| 10 | Should agency markup / fee per ticket be visible in the portal? | Commercial transparency |
-| 11 | Is finance invoice reconciliation ever in platform scope, or always separate? | Scope decision for finance workflow |
-
-### 7.4 Content and policy
-
-| # | Question | Why it matters |
-|---|----------|----------------|
-| 12 | How many destinations and nationalities in the initial visa checklist matrix? | Scope of Travel Hub content |
-| 13 | Will the finalized travel form and traveler master file be provided for field parity? | Ensures form matches operational reality |
-| 14 | Which recurring hotels and airlines should appear as preferred/corporate rate options? | KSA, Netherlands, UAE properties identified in program doc |
-| 15 | Should travel@specserve.com notification be built into the platform or handled outside it? | Affects notification module design |
-
----
-
-## 8. Summary
+## 7. Summary
 
 | | |
 |---|---|
