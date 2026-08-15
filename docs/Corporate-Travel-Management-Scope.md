@@ -618,10 +618,10 @@ The following are explicitly **out of scope** for the platform. They remain with
 
 ### 6.5 What the platform does not replace
 
-| Today | Platform role |
-|-------|---------------|
+| Responsibility | Notes |
+|----------------|-------|
 | Travel agency books flights and hotels | Agency still books — platform governs the process around it |
-| HR approves travel (Chris) | Unchanged — Chris retains approval authority |
+| Chris approves all travel | Unchanged — Chris retains approval authority |
 | Agency holds IATA deposits and credit with airlines | Unchanged — agency responsibility |
 | Finance pays agency invoices | Unchanged — finance responsibility |
 
@@ -629,13 +629,13 @@ The following are explicitly **out of scope** for the platform. They remain with
 
 ## 7. Open Questions
 
-These are meaningful decisions still needed before or during build. They affect scope, integration, and delivery.
+These are meaningful decisions still needed before or during build.
 
 ### 7.1 Scope and platform boundaries
 
 | # | Question | Why it matters |
 |---|----------|----------------|
-| 1 | Does the platform replace the Centurion travel form, or integrate with it? | Melissa is open to an external portal but Centurion currently handles requests |
+| 1 | Does the platform replace the Centurion travel form, or integrate with it? | Centurion currently handles requests; external portal is being considered |
 | 2 | Full flow (request → approval → booking) or start at approved-request stage only? | Determines build size |
 | 3 | Is manager approval shown in the workflow, or only Chris as final approver? | Affects approval screen design |
 | 4 | Include GL code field on the form now, or defer until finance ownership is agreed? | Finance and HR disagree on who owns GL codes |
@@ -646,7 +646,7 @@ These are meaningful decisions still needed before or during build. They affect 
 |---|----------|----------------|
 | 5 | Who is Venture Plus's travel agency partner for production? | Required for live booking execution |
 | 6 | Will rates come from the agency's corporate system or from public/online sources? | Affects how options are sourced and presented |
-| 7 | v1 manual desk entry vs agency API integration — which path first? | Determines integration effort and timeline |
+| 7 | v1 manual desk entry vs agency API integration — which path first? | Determines integration effort |
 | 8 | Does the agency system expose a search/book API, or is all booking manual in their platform? | Determines v2 integration feasibility |
 
 ### 7.3 Commercial and finance
@@ -654,15 +654,15 @@ These are meaningful decisions still needed before or during build. They affect 
 | # | Question | Why it matters |
 |---|----------|----------------|
 | 9 | What credit terms model applies with the agency (deposit, cap, call-off PO)? | Affects whether bookings can be blocked by credit limits |
-| 10 | Should agency markup / fee per ticket be visible in the portal? | Transparency for Melissa's commercial evaluation |
-| 11 | Is finance invoice reconciliation ever in platform scope, or always separate? | Large administrative pain point — scope decision needed |
+| 10 | Should agency markup / fee per ticket be visible in the portal? | Commercial transparency |
+| 11 | Is finance invoice reconciliation ever in platform scope, or always separate? | Scope decision for finance workflow |
 
 ### 7.4 Content and policy
 
 | # | Question | Why it matters |
 |---|----------|----------------|
 | 12 | How many destinations and nationalities in the initial visa checklist matrix? | Scope of Travel Hub content |
-| 13 | Will Melissa provide the finalized travel form and traveler master Excel for field parity? | Ensures form matches operational reality |
+| 13 | Will the finalized travel form and traveler master file be provided for field parity? | Ensures form matches operational reality |
 | 14 | Which recurring hotels and airlines should appear as preferred/corporate rate options? | KSA, Netherlands, UAE properties identified in program doc |
 | 15 | Should travel@specserve.com notification be built into the platform or handled outside it? | Affects notification module design |
 
@@ -681,4 +681,4 @@ These are meaningful decisions still needed before or during build. They affect 
 
 ---
 
-*Document version: 2.0 — Venture Plus × Specialist Services Corporate Travel Platform*
+*Document version: 1.0 — Venture Plus × Specialist Services*
