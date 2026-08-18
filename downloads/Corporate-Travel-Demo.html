@@ -36,7 +36,8 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
 .form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--navy-light); margin-bottom: 8px; }
 .form-group select { width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 15px; background: var(--white); }
 .btn { padding: 12px 24px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all .2s; }
-.btn-primary { background: var(--blue); color: white; width: 100%; }
+.btn-primary { background: var(--blue); color: white; }
+.btn-primary.full { width: 100%; }
 .btn-primary:hover { background: #1d4ed8; }
 .btn-secondary { background: var(--grey-light); color: var(--navy); }
 .btn-success { background: var(--green); color: white; }
@@ -46,13 +47,32 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
 
 /* App shell */
 #app { min-height: 100vh; display: flex; flex-direction: column; }
-.topbar { background: var(--navy); color: white; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 12px rgba(0,0,0,.15); }
+.topbar { background: var(--navy); color: white; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 12px rgba(0,0,0,.15); z-index: 10; }
 .topbar-brand { display: flex; align-items: center; gap: 12px; }
 .topbar-logo { width: 36px; height: 36px; background: rgba(255,255,255,.15); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px; }
 .topbar h1 { font-size: 1.1rem; font-weight: 600; }
 .topbar .client { font-size: 12px; opacity: .75; }
 .topbar-user { display: flex; align-items: center; gap: 16px; font-size: 14px; }
 .role-badge { background: rgba(255,255,255,.2); padding: 4px 12px; border-radius: 20px; font-size: 12px; }
+
+/* Sidebar layout */
+.app-body { display: flex; flex: 1; min-height: calc(100vh - 64px); }
+.sidebar { width: 252px; background: var(--navy-light); color: white; flex-shrink: 0; display: flex; flex-direction: column; border-right: 1px solid rgba(255,255,255,.08); }
+.sidebar-head { padding: 20px 20px 12px; border-bottom: 1px solid rgba(255,255,255,.1); }
+.sidebar-head .role-title { font-size: 11px; text-transform: uppercase; letter-spacing: .6px; opacity: .55; }
+.sidebar-head .role-name { font-size: 14px; font-weight: 600; margin-top: 4px; }
+.sidebar-section { font-size: 10px; text-transform: uppercase; letter-spacing: .7px; opacity: .45; padding: 16px 20px 6px; }
+.sidebar-nav { list-style: none; padding: 8px 0; flex: 1; }
+.sidebar-nav li button { width: 100%; text-align: left; background: none; border: none; color: rgba(255,255,255,.78); padding: 11px 20px; font-size: 14px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: background .15s; }
+.sidebar-nav li button:hover { background: rgba(255,255,255,.08); color: white; }
+.sidebar-nav li button.active { background: rgba(37,99,235,.35); color: white; box-shadow: inset 3px 0 0 var(--blue); }
+.sidebar-nav .nav-badge { margin-left: auto; background: var(--amber); color: white; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 10px; min-width: 20px; text-align: center; }
+.sidebar-foot { padding: 16px 20px; font-size: 11px; opacity: .45; border-top: 1px solid rgba(255,255,255,.1); line-height: 1.5; }
+.content-area { flex: 1; overflow-y: auto; background: linear-gradient(180deg, #f0f4f8 0%, #e8edf3 100%); }
+.content-inner { padding: 24px 28px; max-width: 1280px; }
+.content-header { margin-bottom: 22px; }
+.content-header h2 { font-size: 1.4rem; color: var(--navy); font-weight: 700; }
+.content-header p { color: var(--grey); font-size: 14px; margin-top: 6px; max-width: 720px; line-height: 1.5; }
 .main { flex: 1; padding: 24px; max-width: 1280px; margin: 0 auto; width: 100%; }
 
 /* Stats */
@@ -173,7 +193,7 @@ tr:hover td { background: #fafbfc; }
         <option value="sa">SA — Super Admin</option>
       </select>
     </div>
-    <button class="btn btn-primary" onclick="login()">Sign In</button>
+    <button class="btn btn-primary full" onclick="login()">Sign In</button>
   </div>
 </div>
 
@@ -193,7 +213,15 @@ tr:hover td { background: #fafbfc; }
       <button class="btn btn-secondary btn-sm" onclick="logout()">Logout</button>
     </div>
   </header>
-  <main class="main" id="main-content"></main>
+  <div class="app-body">
+    <aside class="sidebar" id="sidebar"></aside>
+    <div class="content-area">
+      <div class="content-inner">
+        <div class="content-header" id="content-header"></div>
+        <div id="main-content"></div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -237,7 +265,7 @@ const FLIGHTS = [
 ];
 
 let currentUser = null;
-let view = 'list';
+let page = 'dashboard';
 let selectedTicketId = null;
 let agents = [
   { id: 'a1', name: 'Priya Sharma', email: 'priya@ventureplus.com', active: true, tickets: 12 },
@@ -405,15 +433,117 @@ function login() {
   document.getElementById('app').classList.remove('hidden');
   document.getElementById('user-name').textContent = currentUser.name;
   document.getElementById('role-badge').textContent = currentUser.badge;
-  view = 'list';
+  page = 'dashboard';
   selectedTicketId = null;
   render();
 }
 
 function logout() {
   currentUser = null;
+  page = 'dashboard';
   document.getElementById('app').classList.add('hidden');
   document.getElementById('login-screen').classList.remove('hidden');
+}
+
+function navigate(p) {
+  page = p;
+  if (p !== 'detail') selectedTicketId = null;
+  render();
+}
+
+function openTicket(id) {
+  selectedTicketId = id;
+  page = 'detail';
+  render();
+}
+
+function backFromDetail() {
+  const back = { chris: 'inbox', hr: 'governance', agent: 'tickets', sa: 'tickets' };
+  navigate(back[currentUser.role] || 'dashboard');
+}
+
+function getPageMeta() {
+  const m = {
+    chris: {
+      dashboard: { title: 'Dashboard', desc: 'Final approver — approve travel and reconfirm over-band exceptions (Section 2.2).' },
+      inbox: { title: 'Approval Inbox', desc: 'Agent-selected options in Agency × Flight matrix — not the full vendor grid.' },
+      shared: { title: 'Shared Tickets', desc: 'All tickets shared with you for approval or reconfirmation.' },
+    },
+    hr: {
+      dashboard: { title: 'HR Dashboard', desc: 'Governance and oversight — Melissa Payumo, program owner. Monitor compliance; do not coordinate every email.' },
+      governance: { title: 'Governance Queue', desc: 'Monitor visa status, band breaches, and profile accuracy across all travel.' },
+      visa: { title: 'Visa Cases', desc: 'Visa required — NOC, salary certificate, documents, and visa permitted (Section 4.3).' },
+      bands: { title: 'Band Breaches', desc: 'Fares exceeding regional cost band — review before Chris reconfirms (Scenario 3).' },
+    },
+    agent: {
+      dashboard: { title: 'Desk Dashboard', desc: 'Venture Plus travel desk — source options, build vendor matrix, publish to portal (Layer 2).' },
+      tickets: { title: 'Travel Tickets', desc: 'Manage all tickets — add Agency × Flight matrix and select options to share.' },
+      create: { title: 'Create Ticket', desc: 'Individual travel request per traveler — one form per person (FR-01).' },
+      queue: { title: 'Desk Queue', desc: 'Chris-approved requests ready for quoting and booking.' },
+    },
+    sa: {
+      dashboard: { title: 'Admin Dashboard', desc: 'Platform overview — tickets, agents, and audit visibility.' },
+      tickets: { title: 'All Tickets', desc: 'Full vendor × flight price matrix for every ticket.' },
+      agents: { title: 'Manage Agents', desc: 'Venture Plus travel desk agent accounts.' },
+    },
+  };
+  return m[currentUser.role]?.[page];
+}
+
+function renderSidebar() {
+  const pendingChris = tickets.filter(t => t.sharedWithChris && !t.chrisDecision).length;
+  const visaCount = tickets.filter(t => t.trip.visa && !hrVisaChecksComplete(t)).length;
+  const bandCount = tickets.filter(t => isOverBand(t) && !t.governance.bandBreachReviewed).length;
+  const queueCount = tickets.filter(t => t.governance.chrisEmailApproval && t.status !== 'confirmed' && t.status !== 'draft').length;
+
+  const nav = {
+    chris: [
+      { page: 'dashboard', label: 'Dashboard' },
+      { page: 'inbox', label: 'Approval Inbox', badge: pendingChris },
+      { page: 'shared', label: 'Shared Tickets' },
+    ],
+    hr: [
+      { page: 'dashboard', label: 'Dashboard' },
+      { page: 'governance', label: 'Governance Queue' },
+      { page: 'visa', label: 'Visa Cases', badge: visaCount },
+      { page: 'bands', label: 'Band Breaches', badge: bandCount },
+    ],
+    agent: [
+      { page: 'dashboard', label: 'Dashboard' },
+      { page: 'tickets', label: 'Travel Tickets' },
+      { page: 'create', label: 'Create Ticket' },
+      { page: 'queue', label: 'Desk Queue', badge: queueCount },
+    ],
+    sa: [
+      { page: 'dashboard', label: 'Dashboard' },
+      { page: 'tickets', label: 'All Tickets' },
+      { page: 'agents', label: 'Manage Agents' },
+    ],
+  }[currentUser.role] || [];
+
+  document.getElementById('sidebar').innerHTML = `
+    <div class="sidebar-head">
+      <div class="role-title">${currentUser.badge}</div>
+      <div class="role-name">${currentUser.name}</div>
+    </div>
+    <div class="sidebar-section">Navigation</div>
+    <ul class="sidebar-nav">
+      ${nav.map(n => `<li><button type="button" class="${page === n.page ? 'active' : ''}" onclick="navigate('${n.page}')">
+        ${n.label}${n.badge ? `<span class="nav-badge">${n.badge}</span>` : ''}
+      </button></li>`).join('')}
+    </ul>
+    <div class="sidebar-foot">Venture Plus × Specialist Services<br>Corporate Travel Management</div>`;
+}
+
+function renderContentHeader() {
+  const el = document.getElementById('content-header');
+  if (page === 'detail' && selectedTicketId) {
+    const t = getTicket(selectedTicketId);
+    el.innerHTML = `<button class="back-link" onclick="backFromDetail()">← Back</button><h2>${t.id} — ${t.traveler.name}</h2><p>${t.trip.from} → ${t.trip.to} · ${t.scenario}</p>`;
+    return;
+  }
+  const meta = getPageMeta();
+  el.innerHTML = meta ? `<h2>${meta.title}</h2><p>${meta.desc}</p>` : '';
 }
 
 function toast(msg) {
@@ -770,7 +900,7 @@ function createTicket(e) {
   tickets.unshift(ticket);
   toast(visaRequired ? 'Ticket ' + id + ' created. Visa must be secured before agent adds quotes.' : 'Ticket ' + id + ' created. Agent can now add the price matrix.');
   selectedTicketId = id;
-  view = 'detail';
+  page = 'detail';
   render();
 }
 
@@ -797,6 +927,8 @@ function deleteAgent(id) {
 }
 
 function render() {
+  renderSidebar();
+  renderContentHeader();
   const main = document.getElementById('main-content');
   if (currentUser.role === 'chris') renderChris(main);
   else if (currentUser.role === 'hr') renderHR(main);
@@ -804,90 +936,26 @@ function render() {
   else renderSA(main);
 }
 
-function renderHR(main) {
-  if (view === 'detail' && selectedTicketId) {
-    const t = getTicket(selectedTicketId);
-    ensureGov(t);
-    const visaPending = t.trip.visa && !hrVisaChecksComplete(t);
-    main.innerHTML = `
-      <div class="back-link" onclick="view='list';selectedTicketId=null;render()">← Back to governance queue</div>
-      ${t.trip.visa ? `<div class="alert ${visaPending ? 'alert-warn' : 'alert-success'}"><strong>Visa Required — Yes.</strong> ${visaPending ? 'HR must complete all visa checks and mark <em>Visa permitted to proceed</em> before the travel desk can book.' : 'All HR visa checks complete — travel desk may proceed once visa is secured.'}</div>` : ''}
-      <div class="card">
-        <div class="card-header"><h2>${t.id} — ${t.traveler.name}</h2>${statusBadge(t.status)} ${t.trip.visa ? '<span class="badge badge-hr">Visa case</span>' : ''}</div>
-        <div class="card-body">
-          <div class="alert alert-info">HR governance and oversight — program owner: Melissa Payumo. HR monitors compliance; does not coordinate every booking email.</div>
-          <div class="detail-meta">
-            <div class="meta-item"><div class="k">Traveler</div><div class="v">${t.traveler.name}</div></div>
-            <div class="meta-item"><div class="k">Department</div><div class="v">${t.traveler.dept || '—'}</div></div>
-            <div class="meta-item"><div class="k">Route</div><div class="v">${t.trip.from} → ${t.trip.to}</div></div>
-            <div class="meta-item"><div class="k">Visa Required</div><div class="v">${t.trip.visa ? 'Yes' : 'No'}</div></div>
-            <div class="meta-item"><div class="k">Region / Band</div><div class="v">${t.budget.region}</div></div>
-            <div class="meta-item"><div class="k">Scenario</div><div class="v">${t.scenario}</div></div>
-          </div>
-          <h3 style="margin-bottom:12px">HR Governance Checks</h3>
-          ${renderHRGovernance(t, true)}
-        </div>
-      </div>`;
-    return;
-  }
-
-  const visaQueue = tickets.filter(t => t.trip.visa && !hrVisaChecksComplete(t));
-  const bandQueue = tickets.filter(t => isOverBand(t) && !t.governance.bandBreachReviewed);
-  const profileQueue = tickets.filter(t => !t.governance.profileAccurate);
-
-  main.innerHTML = `
-    <div class="stats-row">
-      <div class="stat-card"><div class="label">Visa — HR Action</div><div class="value">${visaQueue.length}</div></div>
-      <div class="stat-card"><div class="label">Over-Band Review</div><div class="value">${bandQueue.length}</div></div>
-      <div class="stat-card"><div class="label">Profile Issues</div><div class="value">${profileQueue.length}</div></div>
-      <div class="stat-card"><div class="label">All Tickets</div><div class="value">${tickets.length}</div></div>
-    </div>
-    <div class="card">
-      <div class="card-header"><h2>HR Governance Queue</h2><span class="badge badge-hr">Melissa Payumo — Program Owner</span></div>
-      <div class="card-body" style="padding:0">
-        <table>
-          <thead><tr><th>Ticket</th><th>Traveler</th><th>Route</th><th>Visa</th><th>HR Status</th><th>Ticket Status</th></tr></thead>
-          <tbody>
-            ${tickets.map(t => {
-              ensureGov(t);
-              const visaFlag = t.trip.visa ? (hrVisaChecksComplete(t) ? '✓ Visa OK' : '🔒 Visa pending') : '—';
-              const hrPending = (t.trip.visa && !hrVisaChecksComplete(t)) || (isOverBand(t) && !t.governance.bandBreachReviewed) || !t.governance.profileAccurate;
-              return `<tr class="clickable-row" onclick="selectedTicketId='${t.id}';view='detail';render()">
-                <td><strong>${t.id}</strong></td>
-                <td>${t.traveler.name}</td>
-                <td>${t.trip.from} → ${t.trip.to}</td>
-                <td>${visaFlag}</td>
-                <td>${hrPending ? '<span class="badge badge-pending-chris">Action needed</span>' : '<span class="badge badge-approved">Clear</span>'}</td>
-                <td>${statusBadge(t.status)}</td>
-              </tr>`;
-            }).join('')}
-          </tbody>
-        </table>
-      </div>
-    </div>`;
-}
-
 function renderChris(main) {
-  if (view === 'detail' && selectedTicketId) {
+  if (page === 'detail' && selectedTicketId) {
     const t = getTicket(selectedTicketId);
     main.innerHTML = `
-      <div class="back-link" onclick="view='list';selectedTicketId=null;render()">← Back to inbox</div>
       <div class="card">
-        <div class="card-header"><h2>${t.id} — ${t.traveler.name}</h2>${statusBadge(t.status)}</div>
+        <div class="card-header"><h2>Review</h2>${statusBadge(t.status)}</div>
         <div class="card-body">
-          <div class="alert alert-info">Agent shared selected options in the Agency × Flight matrix. Highlighted cells are the fares chosen for your review — not the full vendor quote grid.</div>
+          <div class="alert alert-info">Agent shared selected options in the Agency × Flight matrix. Highlighted cells only — not the full vendor grid.</div>
           <div class="detail-meta">
             <div class="meta-item"><div class="k">Route</div><div class="v">${t.trip.from} → ${t.trip.to}</div></div>
             <div class="meta-item"><div class="k">Budget Range</div><div class="v">AED ${t.budget.min.toLocaleString()} – ${t.budget.max.toLocaleString()}</div></div>
             <div class="meta-item"><div class="k">Region / Band</div><div class="v">${t.budget.region}</div></div>
-            <div class="meta-item"><div class="k">Scenario</div><div class="v">${t.scenario}</div></div>
             <div class="meta-item"><div class="k">Visa Required</div><div class="v">${t.trip.visa ? 'Yes' : 'No'}</div></div>
             <div class="meta-item"><div class="k">Travel Class</div><div class="v">${t.trip.travelClass}</div></div>
+            <div class="meta-item"><div class="k">Scenario</div><div class="v">${t.scenario}</div></div>
           </div>
           <h3 style="margin-bottom:12px">Agency × Flight — Agent-Selected Options</h3>
           ${renderChrisSelectedOptions(t)}
           <h3 style="margin:24px 0 12px">Governance Checks</h3>
-          <div class="gov-list">${renderGovernance(t, false)}</div>
+          ${renderGovernance(t, false)}
           ${t.status === 'pending-chris' ? `
           <div class="action-bar">
             <button class="btn btn-success" onclick="chrisApprove('${t.id}')">✓ Approve & Proceed</button>
@@ -897,56 +965,100 @@ function renderChris(main) {
       </div>`;
     return;
   }
+
   const pending = tickets.filter(t => t.sharedWithChris && !t.chrisDecision);
   const all = tickets.filter(t => t.sharedWithChris || t.status === 'pending-chris');
+
+  if (page === 'inbox') {
+    main.innerHTML = `
+      <div class="card">
+        <div class="card-header"><h2>Pending Approval</h2><span class="badge badge-pending-chris">${pending.length} awaiting</span></div>
+        <div class="card-body" style="padding:0">${ticketTable(pending, true)}</div>
+      </div>`;
+    return;
+  }
+
+  if (page === 'shared') {
+    main.innerHTML = `
+      <div class="card">
+        <div class="card-header"><h2>All Shared Tickets</h2></div>
+        <div class="card-body" style="padding:0">
+          <table><thead><tr><th>Ticket</th><th>Traveler</th><th>Decision</th><th>Status</th></tr></thead><tbody>
+            ${all.map(t => `<tr class="clickable-row" onclick="openTicket('${t.id}')">
+              <td>${t.id}</td><td>${t.traveler.name}</td>
+              <td>${t.chrisDecision ? (t.chrisDecision === 'approved' ? '✓ Approved' : '✕ Rejected') : '—'}</td>
+              <td>${statusBadge(t.status)}</td></tr>`).join('') || '<tr><td colspan="4" class="empty-state">No shared tickets</td></tr>'}
+          </tbody></table>
+        </div>
+      </div>`;
+    return;
+  }
+
   main.innerHTML = `
     <div class="stats-row">
       <div class="stat-card"><div class="label">Pending Review</div><div class="value">${pending.length}</div></div>
-      <div class="stat-card"><div class="label">Approved Today</div><div class="value">${tickets.filter(t => t.chrisDecision === 'approved').length}</div></div>
-      <div class="stat-card"><div class="label">Total Tickets</div><div class="value">${tickets.length}</div></div>
+      <div class="stat-card"><div class="label">Approved</div><div class="value">${tickets.filter(t => t.chrisDecision === 'approved').length}</div></div>
+      <div class="stat-card"><div class="label">Over-Band Pending</div><div class="value">${tickets.filter(t => t.status === 'pending-chris').length}</div></div>
     </div>
     <div class="card">
-      <div class="card-header"><h2>Approval Inbox</h2><span class="badge badge-pending-chris">${pending.length} awaiting</span></div>
-      <div class="card-body" style="padding:0">
-        <table>
-          <thead><tr><th>Ticket</th><th>Traveler</th><th>Route</th><th>Budget</th><th>Scenario</th><th>Status</th><th></th></tr></thead>
-          <tbody>
-            ${pending.length ? pending.map(t => `
-              <tr class="clickable-row" onclick="selectedTicketId='${t.id}';view='detail';render()">
-                <td><strong>${t.id}</strong></td>
-                <td>${t.traveler.name}</td>
-                <td>${t.trip.from} → ${t.trip.to}</td>
-                <td>AED ${t.budget.min.toLocaleString()}–${t.budget.max.toLocaleString()}</td>
-                <td>${t.scenario}</td>
-                <td>${statusBadge(t.status)}</td>
-                <td><button class="btn btn-primary btn-sm">Review</button></td>
-              </tr>`).join('') : '<tr><td colspan="7" class="empty-state">No tickets pending your approval</td></tr>'}
-          </tbody>
-        </table>
-      </div>
+      <div class="card-header"><h2>Recent — Approval Inbox</h2><button class="btn btn-primary btn-sm" onclick="navigate('inbox')">View all</button></div>
+      <div class="card-body" style="padding:0">${ticketTable(pending.slice(0, 5), true)}</div>
+    </div>`;
+}
+
+function renderHR(main) {
+  if (page === 'detail' && selectedTicketId) {
+    const t = getTicket(selectedTicketId);
+    ensureGov(t);
+    const visaPending = t.trip.visa && !hrVisaChecksComplete(t);
+    main.innerHTML = `
+      ${t.trip.visa ? `<div class="alert ${visaPending ? 'alert-warn' : 'alert-success'}"><strong>Visa Required.</strong> ${visaPending ? 'Complete HR checks and mark Visa permitted before desk can book.' : 'HR visa checks complete.'}</div>` : ''}
+      <div class="card">
+        <div class="card-header"><h2>HR Governance</h2>${statusBadge(t.status)} ${t.trip.visa ? '<span class="badge badge-hr">Visa case</span>' : ''}</div>
+        <div class="card-body">
+          <div class="detail-meta">
+            <div class="meta-item"><div class="k">Traveler</div><div class="v">${t.traveler.name}</div></div>
+            <div class="meta-item"><div class="k">Department</div><div class="v">${t.traveler.dept || '—'}</div></div>
+            <div class="meta-item"><div class="k">Route</div><div class="v">${t.trip.from} → ${t.trip.to}</div></div>
+            <div class="meta-item"><div class="k">Visa Required</div><div class="v">${t.trip.visa ? 'Yes' : 'No'}</div></div>
+          </div>
+          ${renderHRGovernance(t, true)}
+        </div>
+      </div>`;
+    return;
+  }
+
+  const visaQueue = tickets.filter(t => t.trip.visa && !hrVisaChecksComplete(t));
+  const bandQueue = tickets.filter(t => isOverBand(t) && !t.governance.bandBreachReviewed);
+  const list = page === 'visa' ? visaQueue : page === 'bands' ? bandQueue : tickets;
+
+  if (page === 'governance' || page === 'visa' || page === 'bands') {
+    main.innerHTML = `
+      <div class="card">
+        <div class="card-header"><h2>${page === 'visa' ? 'Visa Cases' : page === 'bands' ? 'Band Breaches' : 'All Tickets'}</h2></div>
+        <div class="card-body" style="padding:0">${hrTicketTable(list)}</div>
+      </div>`;
+    return;
+  }
+
+  main.innerHTML = `
+    <div class="stats-row">
+      <div class="stat-card"><div class="label">Visa — HR Action</div><div class="value">${visaQueue.length}</div></div>
+      <div class="stat-card"><div class="label">Over-Band Review</div><div class="value">${bandQueue.length}</div></div>
+      <div class="stat-card"><div class="label">Profile Issues</div><div class="value">${tickets.filter(t => !t.governance.profileAccurate).length}</div></div>
+      <div class="stat-card"><div class="label">All Tickets</div><div class="value">${tickets.length}</div></div>
     </div>
     <div class="card">
-      <div class="card-header"><h2>All Shared Tickets</h2></div>
-      <div class="card-body" style="padding:0">
-        <table>
-          <thead><tr><th>Ticket</th><th>Traveler</th><th>Decision</th><th>Status</th></tr></thead>
-          <tbody>
-            ${all.map(t => `<tr class="clickable-row" onclick="selectedTicketId='${t.id}';view='detail';render()">
-              <td>${t.id}</td><td>${t.traveler.name}</td>
-              <td>${t.chrisDecision ? (t.chrisDecision === 'approved' ? '✓ Approved' : '✕ Rejected') : '—'}</td>
-              <td>${statusBadge(t.status)}</td></tr>`).join('')}
-          </tbody>
-        </table>
-      </div>
+      <div class="card-header"><h2>Action Required</h2></div>
+      <div class="card-body" style="padding:0">${hrTicketTable(tickets.filter(t => (t.trip.visa && !hrVisaChecksComplete(t)) || (isOverBand(t) && !t.governance.bandBreachReviewed) || !t.governance.profileAccurate).slice(0, 8))}</div>
     </div>`;
 }
 
 function renderAgent(main) {
-  if (view === 'create') {
+  if (page === 'create') {
     main.innerHTML = `
-      <div class="back-link" onclick="view='list';render()">← Back to tickets</div>
       <div class="card">
-        <div class="card-header"><h2>Create Travel Ticket</h2></div>
+        <div class="card-header"><h2>New Travel Request</h2></div>
         <div class="card-body">
           <form onsubmit="createTicket(event)">
             <div class="form-grid">
@@ -972,71 +1084,34 @@ function renderAgent(main) {
               <div class="form-field"><label>Budget Max (AED) *</label><input name="budgetMax" type="number" required value="5000"></div>
               <div class="form-field"><label><input type="checkbox" name="urgent"> Urgent travel</label></div>
             </div>
-            <div class="action-bar"><button type="submit" class="btn btn-primary">Create Ticket</button></div>
+            <div class="action-bar"><button type="submit" class="btn btn-primary" style="width:auto">Create Ticket</button></div>
           </form>
         </div>
       </div>`;
     return;
   }
 
-  if (view === 'detail' && selectedTicketId) {
-    const t = getTicket(selectedTicketId);
-    const visaBlocked = isVisaBlocked(t);
-    const canAct = !visaBlocked && t.status !== 'locked' && t.status !== 'confirmed';
-    const withinAll = allSelectedWithinBudget(t);
+  if (page === 'detail' && selectedTicketId) {
+    main.innerHTML = renderAgentTicketDetail(getTicket(selectedTicketId));
+    return;
+  }
+
+  const queue = tickets.filter(t => t.governance.chrisEmailApproval && !['confirmed', 'draft'].includes(t.status));
+
+  if (page === 'queue') {
     main.innerHTML = `
-      <div class="back-link" onclick="view='list';selectedTicketId=null;render()">← Back to tickets</div>
-      ${visaBlocked ? '<div class="alert alert-warn"><strong>Visa Required — Ticket Created Only.</strong> Visa is not secured. No vendor quotes, no booking, and no further steps until visa is marked secured in governance checks.</div>' : ''}
-      <div class="detail-grid">
-        <div>
-          <div class="card">
-            <div class="card-header"><h2>${t.id} — ${t.traveler.name}</h2>${statusBadge(t.status)} ${t.trip.urgent ? '<span class="badge badge-urgent">URGENT</span>' : ''}</div>
-            <div class="card-body">
-              <div class="detail-meta">
-                <div class="meta-item"><div class="k">Email</div><div class="v">${t.traveler.email}</div></div>
-                <div class="meta-item"><div class="k">Age</div><div class="v">${t.traveler.age}</div></div>
-                <div class="meta-item"><div class="k">Route</div><div class="v">${t.trip.from} → ${t.trip.to}</div></div>
-                <div class="meta-item"><div class="k">Dates</div><div class="v">${t.trip.depart} → ${t.trip.return}</div></div>
-                <div class="meta-item"><div class="k">Budget</div><div class="v">AED ${t.budget.min.toLocaleString()} – ${t.budget.max.toLocaleString()}</div></div>
-                <div class="meta-item"><div class="k">Project</div><div class="v">${t.trip.project}</div></div>
-                <div class="meta-item"><div class="k">Visa</div><div class="v">${t.trip.visa ? (t.governance.visaPermitted && t.governance.visaSecured ? 'Required — permitted & secured' : t.governance.visaPermitted ? 'Required — HR permitted, desk pending' : 'Required — HR action pending') : 'Not required'}</div></div>
-                <div class="meta-item"><div class="k">Class</div><div class="v">${t.trip.travelClass}</div></div>
-              </div>
-              <p style="font-size:13px;color:#64748b;margin-bottom:16px"><strong>Scenario:</strong> ${t.scenario} · ${t.notes}</p>
-              ${visaBlocked ? `
-                <div class="empty-state" style="padding:32px;background:#fef2f2;border-radius:8px;border:1px solid #fecaca">
-                  <strong style="color:#b91c1c">Booking workflow stopped</strong><br><br>
-                  Ticket has been created and recorded. Because visa is required and HR has not yet permitted travel, the agent cannot add vendor prices, share options with Chris, or confirm any booking.<br><br>
-                  HR (Melissa Payumo) must complete NOC, salary certificate, document checks, and mark <strong>Visa permitted to proceed</strong>. Then the travel desk marks <strong>Visa secured</strong> to unlock booking.
-                </div>` : `
-              <h3 style="margin-bottom:8px">Agency × Flight Price Matrix</h3>
-              <p style="font-size:13px;color:#64748b;margin-bottom:12px">${t.matrix ? 'Add or edit vendor quotes (AED) in any cell. Tick <strong>Select for Chris</strong> on cells to share. Green = within budget (≤ AED ' + t.budget.max.toLocaleString() + '). Red = over budget.' : 'Click below to create the matrix, then enter quotes from each travel agency.'}</p>
-              ${renderMatrix(t, { editablePrices: canAct })}
-              ${canAct && matrixHasQuotes(t) ? `<div class="action-bar">
-                <button class="btn btn-success" onclick="agentConfirmTraveler('${t.id}')" ${!withinAll ? 'disabled title="Selections exceed budget"' : ''}>✓ Confirm & Share with Traveler</button>
-                <button class="btn btn-warning" onclick="agentShareWithChris('${t.id}')">Share Selected with Chris</button>
-              </div>
-              <p style="font-size:12px;color:#64748b;margin-top:8px">Within budget → confirm directly. Over budget → share with Chris for approval.</p>` : canAct && !t.matrix ? '' : canAct ? '<p style="font-size:12px;color:#64748b;margin-top:8px">Enter at least one vendor quote to enable sharing.</p>' : ''}`}
-            </div>
-          </div>
-        </div>
-        <div>
-          <div class="card">
-            <div class="card-header"><h2>Governance Checks</h2></div>
-            <div class="card-body"><div class="gov-list">${renderGovernance(t, visaBlocked ? 'visa-only' : canAct)}</div></div>
-          </div>
-          <div class="card">
-            <div class="card-header"><h2>Trip Details</h2></div>
-            <div class="card-body" style="font-size:14px;line-height:1.8">
-              <div><strong>Purpose:</strong> ${t.trip.purpose}</div>
-              <div><strong>Hotel:</strong> ${t.trip.hotel}</div>
-              <div><strong>Car:</strong> ${t.trip.car}</div>
-              <div><strong>Departure pref:</strong> ${t.trip.departTime}</div>
-              <div><strong>Return pref:</strong> ${t.trip.returnTime}</div>
-              <div><strong>Dept Head:</strong> ${t.traveler.deptHead}</div>
-            </div>
-          </div>
-        </div>
+      <div class="card">
+        <div class="card-header"><h2>Approved — Ready to Quote</h2></div>
+        <div class="card-body" style="padding:0">${agentTicketTable(queue)}</div>
+      </div>`;
+    return;
+  }
+
+  if (page === 'tickets') {
+    main.innerHTML = `
+      <div class="card">
+        <div class="card-header"><h2>All Tickets</h2><button class="btn btn-primary btn-sm" onclick="navigate('create')">+ Create</button></div>
+        <div class="card-body" style="padding:0">${agentTicketTable(tickets)}</div>
       </div>`;
     return;
   }
@@ -1045,58 +1120,60 @@ function renderAgent(main) {
     <div class="stats-row">
       <div class="stat-card"><div class="label">My Tickets</div><div class="value">${tickets.length}</div></div>
       <div class="stat-card"><div class="label">Quoting</div><div class="value">${tickets.filter(t => t.status === 'quoting').length}</div></div>
+      <div class="stat-card"><div class="label">Desk Queue</div><div class="value">${queue.length}</div></div>
       <div class="stat-card"><div class="label">Pending Chris</div><div class="value">${tickets.filter(t => t.status === 'pending-chris').length}</div></div>
-      <div class="stat-card"><div class="label">Confirmed</div><div class="value">${tickets.filter(t => t.status === 'confirmed').length}</div></div>
     </div>
     <div class="card">
-      <div class="card-header">
-        <h2>Travel Tickets</h2>
-        <button class="btn btn-primary btn-sm" onclick="view='create';render()">+ Create Ticket</button>
-      </div>
-      <div class="card-body" style="padding:0">
-        <table>
-          <thead><tr><th>Ticket</th><th>Traveler</th><th>Route</th><th>Budget Max</th><th>Scenario</th><th>Visa</th><th>Status</th></tr></thead>
-          <tbody>
-            ${tickets.map(t => `
-              <tr class="clickable-row" onclick="selectedTicketId='${t.id}';view='detail';render()">
-                <td><strong>${t.id}</strong></td>
-                <td>${t.traveler.name}</td>
-                <td>${t.trip.from} → ${t.trip.to}</td>
-                <td>AED ${t.budget.max.toLocaleString()}</td>
-                <td>${t.scenario}</td>
-                <td>${t.trip.visa ? '🔒 Yes' : 'No'}</td>
-                <td>${statusBadge(t.status)}</td>
-              </tr>`).join('')}
-          </tbody>
-        </table>
-      </div>
+      <div class="card-header"><h2>Desk Queue</h2><button class="btn btn-secondary btn-sm" onclick="navigate('queue')">View all</button></div>
+      <div class="card-body" style="padding:0">${agentTicketTable(queue.slice(0, 6))}</div>
     </div>`;
 }
 
 function renderSA(main) {
-  if (view === 'detail' && selectedTicketId) {
+  if (page === 'detail' && selectedTicketId) {
     const t = getTicket(selectedTicketId);
     const ag = agents.find(a => a.id === t.agentId);
     const visaBlocked = isVisaBlocked(t);
     main.innerHTML = `
-      <div class="back-link" onclick="view='list';selectedTicketId=null;render()">← Back to overview</div>
-      ${visaBlocked ? '<div class="alert alert-warn"><strong>Visa Required — Ticket Created Only.</strong> No booking workflow until visa is secured.</div>' : ''}
+      ${visaBlocked ? '<div class="alert alert-warn"><strong>Visa Locked</strong> — booking pending visa.</div>' : ''}
       <div class="card">
-        <div class="card-header"><h2>${t.id} — ${t.traveler.name}</h2>${statusBadge(t.status)}</div>
+        <div class="card-header"><h2>Ticket Detail</h2>${statusBadge(t.status)}</div>
         <div class="card-body">
-          <div class="alert alert-info">${visaBlocked ? 'Super Admin view — ticket recorded. Booking locked pending visa.' : 'Super Admin view — full agency × flight price matrix (all vendor quotes).'}</div>
           <div class="detail-meta">
             <div class="meta-item"><div class="k">Agent</div><div class="v">${ag?.name || '—'}</div></div>
             <div class="meta-item"><div class="k">Route</div><div class="v">${t.trip.from} → ${t.trip.to}</div></div>
             <div class="meta-item"><div class="k">Budget</div><div class="v">AED ${t.budget.min.toLocaleString()} – ${t.budget.max.toLocaleString()}</div></div>
-            <div class="meta-item"><div class="k">Scenario</div><div class="v">${t.scenario}</div></div>
           </div>
-          <h3 style="margin-bottom:12px">Full Vendor × Flight Price Matrix</h3>
-          <p style="font-size:13px;color:#64748b;margin-bottom:12px">All agency quotes. Selected cells marked with ★ (what Chris sees).</p>
+          <h3 style="margin-bottom:12px">Full Vendor × Flight Matrix</h3>
           ${renderMatrix(t, { selectable: false })}
-          <h3 style="margin:24px 0 12px">Governance Checks</h3>
-          <div class="gov-list">${renderGovernance(t, false)}</div>
+          <h3 style="margin:24px 0 12px">Governance</h3>
+          ${renderGovernance(t, false)}
         </div>
+      </div>`;
+    return;
+  }
+
+  if (page === 'agents') {
+    main.innerHTML = `
+      <div class="card">
+        <div class="card-header"><h2>Manage Agents</h2><button class="btn btn-primary btn-sm" onclick="addAgent()">+ Add Agent</button></div>
+        <div class="card-body" style="padding:0">
+          <table><thead><tr><th>Name</th><th>Email</th><th>Status</th><th>Actions</th></tr></thead><tbody>
+            ${agents.map(a => `<tr><td><strong>${a.name}</strong></td><td>${a.email}</td>
+              <td>${a.active ? '<span class="badge badge-approved">Active</span>' : '<span class="badge badge-draft">Inactive</span>'}</td>
+              <td><button class="btn btn-secondary btn-sm" onclick="toggleAgent('${a.id}')">${a.active ? 'Deactivate' : 'Activate'}</button>
+              <button class="btn btn-secondary btn-sm" onclick="deleteAgent('${a.id}')">Remove</button></td></tr>`).join('')}
+          </tbody></table>
+        </div>
+      </div>`;
+    return;
+  }
+
+  if (page === 'tickets') {
+    main.innerHTML = `
+      <div class="card">
+        <div class="card-header"><h2>All Tickets</h2></div>
+        <div class="card-body" style="padding:0">${saTicketTable(tickets)}</div>
       </div>`;
     return;
   }
@@ -1108,44 +1185,104 @@ function renderSA(main) {
       <div class="stat-card"><div class="label">Confirmed</div><div class="value">${tickets.filter(t => t.status === 'confirmed').length}</div></div>
     </div>
     <div class="card">
-      <div class="card-header">
-        <h2>Manage Agents</h2>
-        <button class="btn btn-primary btn-sm" onclick="addAgent()">+ Add Agent</button>
+      <div class="card-header"><h2>Recent Tickets</h2><button class="btn btn-secondary btn-sm" onclick="navigate('tickets')">View all</button></div>
+      <div class="card-body" style="padding:0">${saTicketTable(tickets.slice(0, 8))}</div>
+    </div>`;
+}
+
+function ticketTable(list, showReview) {
+  if (!list.length) return '<p class="empty-state">No tickets</p>';
+  return `<table><thead><tr><th>Ticket</th><th>Traveler</th><th>Route</th><th>Budget</th><th>Scenario</th><th>Status</th>${showReview ? '<th></th>' : ''}</tr></thead><tbody>
+    ${list.map(t => `<tr class="clickable-row" onclick="openTicket('${t.id}')">
+      <td><strong>${t.id}</strong></td><td>${t.traveler.name}</td>
+      <td>${t.trip.from} → ${t.trip.to}</td>
+      <td>AED ${t.budget.min.toLocaleString()}–${t.budget.max.toLocaleString()}</td>
+      <td>${t.scenario}</td><td>${statusBadge(t.status)}</td>
+      ${showReview ? '<td><button class="btn btn-primary btn-sm">Review</button></td>' : ''}
+    </tr>`).join('')}
+  </tbody></table>`;
+}
+
+function hrTicketTable(list) {
+  if (!list.length) return '<p class="empty-state">No tickets in this queue</p>';
+  return `<table><thead><tr><th>Ticket</th><th>Traveler</th><th>Route</th><th>Visa</th><th>HR Status</th><th>Status</th></tr></thead><tbody>
+    ${list.map(t => {
+      ensureGov(t);
+      const hrPending = (t.trip.visa && !hrVisaChecksComplete(t)) || (isOverBand(t) && !t.governance.bandBreachReviewed) || !t.governance.profileAccurate;
+      return `<tr class="clickable-row" onclick="openTicket('${t.id}')">
+        <td><strong>${t.id}</strong></td><td>${t.traveler.name}</td>
+        <td>${t.trip.from} → ${t.trip.to}</td>
+        <td>${t.trip.visa ? (hrVisaChecksComplete(t) ? '✓ OK' : '🔒 Pending') : '—'}</td>
+        <td>${hrPending ? '<span class="badge badge-pending-chris">Action</span>' : '<span class="badge badge-approved">Clear</span>'}</td>
+        <td>${statusBadge(t.status)}</td></tr>`;
+    }).join('')}
+  </tbody></table>`;
+}
+
+function agentTicketTable(list) {
+  if (!list.length) return '<p class="empty-state">No tickets</p>';
+  return `<table><thead><tr><th>Ticket</th><th>Traveler</th><th>Route</th><th>Budget</th><th>Visa</th><th>Status</th></tr></thead><tbody>
+    ${list.map(t => `<tr class="clickable-row" onclick="openTicket('${t.id}')">
+      <td><strong>${t.id}</strong></td><td>${t.traveler.name}</td>
+      <td>${t.trip.from} → ${t.trip.to}</td>
+      <td>AED ${t.budget.max.toLocaleString()}</td>
+      <td>${t.trip.visa ? '🔒' : '—'}</td>
+      <td>${statusBadge(t.status)}</td></tr>`).join('')}
+  </tbody></table>`;
+}
+
+function saTicketTable(list) {
+  if (!list.length) return '<p class="empty-state">No tickets</p>';
+  return `<table><thead><tr><th>Ticket</th><th>Traveler</th><th>Agent</th><th>Scenario</th><th>Status</th></tr></thead><tbody>
+    ${list.map(t => {
+      const ag = agents.find(a => a.id === t.agentId);
+      return `<tr class="clickable-row" onclick="openTicket('${t.id}')">
+        <td>${t.id}</td><td>${t.traveler.name}</td><td>${ag?.name || '—'}</td>
+        <td>${t.scenario}</td><td>${statusBadge(t.status)}</td></tr>`;
+    }).join('')}
+  </tbody></table>`;
+}
+
+function renderAgentTicketDetail(t) {
+  const visaBlocked = isVisaBlocked(t);
+  const canAct = !visaBlocked && t.status !== 'locked' && t.status !== 'confirmed';
+  const withinAll = allSelectedWithinBudget(t);
+  return `
+    ${visaBlocked ? '<div class="alert alert-warn"><strong>Visa Required — Ticket Created Only.</strong> Complete HR visa checks before booking.</div>' : ''}
+    <div class="detail-grid">
+      <div class="card">
+        <div class="card-header"><h2>Price Matrix</h2>${statusBadge(t.status)}</div>
+        <div class="card-body">
+          <div class="detail-meta">
+            <div class="meta-item"><div class="k">Route</div><div class="v">${t.trip.from} → ${t.trip.to}</div></div>
+            <div class="meta-item"><div class="k">Budget</div><div class="v">AED ${t.budget.min.toLocaleString()} – ${t.budget.max.toLocaleString()}</div></div>
+            <div class="meta-item"><div class="k">Visa</div><div class="v">${t.trip.visa ? 'Required' : 'No'}</div></div>
+            <div class="meta-item"><div class="k">Class</div><div class="v">${t.trip.travelClass}</div></div>
+          </div>
+          ${visaBlocked ? `<div class="empty-state" style="padding:24px;background:#fef2f2;border-radius:8px"><strong>Booking stopped</strong> — HR must permit visa; desk marks visa secured.</div>` : `
+          <p style="font-size:13px;color:#64748b;margin-bottom:12px">Add or edit vendor quotes (AED). Select cells to share with Chris.</p>
+          ${renderMatrix(t, { editablePrices: canAct })}
+          ${canAct && matrixHasQuotes(t) ? `<div class="action-bar">
+            <button class="btn btn-success" onclick="agentConfirmTraveler('${t.id}')" ${!withinAll ? 'disabled' : ''}>✓ Confirm with Traveler</button>
+            <button class="btn btn-warning" onclick="agentShareWithChris('${t.id}')">Share with Chris</button>
+          </div>` : ''}`}
+        </div>
       </div>
-      <div class="card-body" style="padding:0">
-        <table>
-          <thead><tr><th>Name</th><th>Email</th><th>Tickets Handled</th><th>Status</th><th>Actions</th></tr></thead>
-          <tbody>
-            ${agents.map(a => `
-              <tr>
-                <td><strong>${a.name}</strong></td>
-                <td>${a.email}</td>
-                <td>${a.tickets}</td>
-                <td>${a.active ? '<span class="badge badge-approved">Active</span>' : '<span class="badge badge-draft">Inactive</span>'}</td>
-                <td>
-                  <button class="btn btn-secondary btn-sm" onclick="toggleAgent('${a.id}')">${a.active ? 'Deactivate' : 'Activate'}</button>
-                  <button class="btn btn-secondary btn-sm" onclick="deleteAgent('${a.id}')">Remove</button>
-                </td>
-              </tr>`).join('')}
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-header"><h2>All Tickets Overview</h2></div>
-      <div class="card-body" style="padding:0">
-        <table>
-          <thead><tr><th>Ticket</th><th>Traveler</th><th>Agent</th><th>Scenario</th><th>Status</th></tr></thead>
-          <tbody>
-            ${tickets.map(t => {
-              const ag = agents.find(a => a.id === t.agentId);
-              return `<tr class="clickable-row" onclick="selectedTicketId='${t.id}';view='detail';render()"><td>${t.id}</td><td>${t.traveler.name}</td><td>${ag?.name || '—'}</td><td>${t.scenario}</td><td>${statusBadge(t.status)}</td></tr>`;
-            }).join('')}
-          </tbody>
-        </table>
+      <div>
+        <div class="card"><div class="card-header"><h2>Governance</h2></div>
+          <div class="card-body">${renderGovernance(t, visaBlocked ? 'visa-only' : canAct)}</div>
+        </div>
+        <div class="card"><div class="card-header"><h2>Trip Details</h2></div>
+          <div class="card-body" style="font-size:14px;line-height:1.8">
+            <div><strong>Purpose:</strong> ${t.trip.purpose}</div>
+            <div><strong>Hotel:</strong> ${t.trip.hotel}</div>
+            <div><strong>Car:</strong> ${t.trip.car}</div>
+          </div>
+        </div>
       </div>
     </div>`;
 }
+
 </script>
 </body>
 </html>
