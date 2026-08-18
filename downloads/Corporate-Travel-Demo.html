@@ -282,7 +282,12 @@ function updateMatrixPrice(ticketId, agency, flightId, value) {
   const t = getTicket(ticketId);
   if (!t?.matrix || isVisaBlocked(t)) return;
   const price = value === '' ? null : parseInt(value, 10);
-  t.matrix[agency][flightId].price = Number.isFinite(price) && price > 0 ? price : null;
+  const valid = Number.isFinite(price) && price > 0;
+  t.matrix[agency][flightId].price = valid ? price : null;
+  if (!valid && t.selectedCells[agency]) {
+    t.selectedCells[agency] = t.selectedCells[agency].filter(id => id !== flightId);
+    if (!t.selectedCells[agency].length) delete t.selectedCells[agency];
+  }
 }
 
 function matrixHasQuotes(ticket) {
@@ -568,67 +573,11 @@ function getSelectedOptions(ticket) {
   return selections;
 }
 
-function renderChrisSelectedOptions(ticket) {
-  if (!ticket.matrix) {
-    return '<p class="empty-state">Agent has not shared any selected options for your review yet.</p>';
-  }
-  const selections = getSelectedOptions(ticket);
-  if (!selections.length) {
-    return '<p class="empty-state">Agent has not shared any selected options for your review yet.</p>';
-  }
-  const selectedFlights = FLIGHTS.filter(f =>
-    AGENCIES.some(ag => ticket.selectedCells[ag]?.includes(f.id))
-  );
-  let html = '<div class="matrix-wrap"><table class="matrix-table"><thead><tr><th>Travel Agency</th>';
-  selectedFlights.forEach(f => {
-    html += `<th class="flight-col">${f.name}<br><small>${f.time}</small></th>`;
-  });
-  html += '</tr></thead><tbody>';
-  AGENCIES.forEach(ag => {
-    const rowHasSelection = selectedFlights.some(f => ticket.selectedCells[ag]?.includes(f.id));
-    if (!rowHasSelection) return;
-    html += `<tr><td class="agency-name">${ag}</td>`;
-    selectedFlights.forEach(f => {
-      const sel = ticket.selectedCells[ag]?.includes(f.id);
-      if (!sel) {
-        html += '<td class="matrix-cell chris-empty"><div class="price" style="color:#94a3b8">—</div></td>';
-        return;
-      }
-      const cell = ticket.matrix[ag][f.id];
-      const within = isWithinBudget(cell.price, ticket);
-      const cls = `matrix-cell chris-selected ${within ? 'within-budget' : 'over-budget'}`;
-      html += `<td class="${cls}">
-        <div class="price">AED ${cell.price.toLocaleString()}</div>
-        <div class="airline">${cell.airline}</div>
-        <span class="budget-tag">${within ? '<span class="badge badge-approved">Within budget</span>' : '<span class="badge badge-pending-chris">Over budget</span>'}</span>
-      </td>`;
-    });
-    html += '</tr>';
-  });
-  html += '</tbody></table></div>';
-  html += `<p style="font-size:12px;color:#64748b;margin-top:12px">Agency × Flight matrix — agent-selected cells only. Full vendor quotes are not shown.</p>`;
-  return html;
-}
-
-function renderSelectedOptions(ticket) {
-  return renderChrisSelectedOptions(ticket);
-}
-
-function renderMatrix(ticket, options = {}) {
-  if (currentUser?.role === 'chris') return renderChrisSelectedOptions(ticket);
-  const { selectable = false, editablePrices = false } = options;
-  if (!ticket.matrix) {
-    if (isVisaBlocked(ticket)) {
-      return '<div class="empty-state" style="padding:24px;background:#fef2f2;border-radius:8px;border:1px solid #fecaca"><strong style="color:#b91c1c">Visa not secured — ticket created only.</strong><br><br>No vendor quotes or booking steps until visa is marked secured.</div>';
-    }
-    if (editablePrices) {
-      return `<div class="matrix-add-panel">
-        <p>The agent collects quotes from travel agencies and adds the Agency × Flight price matrix here.</p>
-        <button class="btn btn-primary" onclick="initMatrix('${ticket.id}')">+ Add Agency × Flight Price Matrix</button>
-      </div>`;
-    }
-    return '<p class="empty-state">Agent has not added the price matrix yet.</p>';
-  }
+function renderMatrixTable(ticket, mode) {
+  // mode: 'agent-edit' | 'agent-select' | 'chris-selected' | 'readonly'
+  const isChris = mode === 'chris-selected';
+  const editable = mode === 'agent-edit';
+  const selectable = mode === 'agent-select' || mode === 'agent-edit';
   let html = '<div class="matrix-wrap"><table class="matrix-table"><thead><tr><th>Travel Agency</th>';
   FLIGHTS.forEach(f => {
     html += `<th class="flight-col">${f.name}<br><small>${f.time}</small></th>`;
@@ -641,13 +590,26 @@ function renderMatrix(ticket, options = {}) {
       const hasPrice = cell.price != null && cell.price > 0;
       const within = hasPrice && isWithinBudget(cell.price, ticket);
       const sel = ticket.selectedCells[ag]?.includes(f.id);
+      if (isChris) {
+        if (!sel || !hasPrice) {
+          html += '<td class="matrix-cell chris-empty"><div class="price" style="color:#94a3b8">—</div></td>';
+        } else {
+          const cls = `matrix-cell chris-selected ${within ? 'within-budget' : 'over-budget'}`;
+          html += `<td class="${cls}">
+            <div class="price">AED ${cell.price.toLocaleString()}</div>
+            <div class="airline">${cell.airline}</div>
+            <span class="budget-tag">${within ? '<span class="badge badge-approved">Within budget</span>' : '<span class="badge badge-pending-chris">Over budget</span>'}</span>
+          </td>`;
+        }
+        return;
+      }
       const cls = `matrix-cell ${!hasPrice ? 'empty-cell' : within ? 'within-budget' : 'over-budget'} ${sel ? 'selected' : ''}`;
-      if (editablePrices) {
+      if (editable) {
         html += `<td class="${cls}">
           <input type="number" class="matrix-price-input" min="1" step="1" placeholder="AED" value="${hasPrice ? cell.price : ''}"
-            onchange="updateMatrixPrice('${ticket.id}','${ag}','${f.id}',this.value);render()">
+            onblur="updateMatrixPrice('${ticket.id}','${ag}','${f.id}',this.value);render()">
           <div class="airline">${cell.airline}</div>
-          ${hasPrice && selectable ? `<label style="display:block;margin-top:6px;font-size:11px"><input type="checkbox" ${sel ? 'checked' : ''} onclick="event.stopPropagation();toggleCell('${ticket.id}','${ag}','${f.id}')"> Select</label>` : ''}
+          ${hasPrice ? `<label style="display:block;margin-top:6px;font-size:11px"><input type="checkbox" ${sel ? 'checked' : ''} onclick="event.stopPropagation();toggleCell('${ticket.id}','${ag}','${f.id}')"> Select for Chris</label>` : ''}
         </td>`;
       } else if (selectable && hasPrice) {
         html += `<td class="${cls}" onclick="toggleCell('${ticket.id}','${ag}','${f.id}')">
@@ -666,6 +628,43 @@ function renderMatrix(ticket, options = {}) {
   });
   html += '</tbody></table></div>';
   return html;
+}
+
+function renderChrisSelectedOptions(ticket) {
+  if (!ticket.matrix) {
+    return '<p class="empty-state">Agent has not shared any selected options for your review yet.</p>';
+  }
+  const selections = getSelectedOptions(ticket);
+  if (!selections.length) {
+    return '<p class="empty-state">Agent has not shared any selected options for your review yet.</p>';
+  }
+  let html = renderMatrixTable(ticket, 'chris-selected');
+  html += `<p style="font-size:12px;color:#64748b;margin-top:12px">Full Agency × Flight matrix — highlighted cells are agent-selected options shared for your approval. Other vendor quotes are not shown.</p>`;
+  return html;
+}
+
+function renderSelectedOptions(ticket) {
+  return renderChrisSelectedOptions(ticket);
+}
+
+function renderMatrix(ticket, options = {}) {
+  if (currentUser?.role === 'chris') return renderChrisSelectedOptions(ticket);
+  const { selectable = false, editablePrices = false } = options;
+  if (!ticket.matrix) {
+    if (isVisaBlocked(ticket)) {
+      return '<div class="empty-state" style="padding:24px;background:#fef2f2;border-radius:8px;border:1px solid #fecaca"><strong style="color:#b91c1c">Visa not secured — ticket created only.</strong><br><br>No vendor quotes or booking steps until visa is marked secured.</div>';
+    }
+    if (editablePrices) {
+      return `<div class="matrix-add-panel">
+        <p>The agent collects quotes from travel agencies and builds the Agency × Flight price matrix.</p>
+        <button class="btn btn-primary" onclick="initMatrix('${ticket.id}')">+ Add Agency × Flight Price Matrix</button>
+      </div>`;
+    }
+    return '<p class="empty-state">Agent has not added the price matrix yet.</p>';
+  }
+  if (editablePrices) return renderMatrixTable(ticket, 'agent-edit');
+  if (selectable) return renderMatrixTable(ticket, 'agent-select');
+  return renderMatrixTable(ticket, 'readonly');
 }
 
 function toggleCell(ticketId, agency, flightId) {
@@ -876,7 +875,7 @@ function renderChris(main) {
       <div class="card">
         <div class="card-header"><h2>${t.id} — ${t.traveler.name}</h2>${statusBadge(t.status)}</div>
         <div class="card-body">
-          <div class="alert alert-info">Agent shared selected flight options for your review. You see only the fares the agent chose — not the full vendor price matrix.</div>
+          <div class="alert alert-info">Agent shared selected options in the Agency × Flight matrix. Highlighted cells are the fares chosen for your review — not the full vendor quote grid.</div>
           <div class="detail-meta">
             <div class="meta-item"><div class="k">Route</div><div class="v">${t.trip.from} → ${t.trip.to}</div></div>
             <div class="meta-item"><div class="k">Budget Range</div><div class="v">AED ${t.budget.min.toLocaleString()} – ${t.budget.max.toLocaleString()}</div></div>
@@ -1011,8 +1010,8 @@ function renderAgent(main) {
                   HR (Melissa Payumo) must complete NOC, salary certificate, document checks, and mark <strong>Visa permitted to proceed</strong>. Then the travel desk marks <strong>Visa secured</strong> to unlock booking.
                 </div>` : `
               <h3 style="margin-bottom:8px">Agency × Flight Price Matrix</h3>
-              <p style="font-size:13px;color:#64748b;margin-bottom:12px">${t.matrix ? 'Enter vendor quotes from each agency, then select options to share. Green = within budget (≤ AED ' + t.budget.max.toLocaleString() + '). Red = over budget.' : 'Agent collects quotes from travel agencies and adds the price matrix here before any booking step.'}</p>
-              ${renderMatrix(t, { selectable: canAct && matrixHasQuotes(t), editablePrices: canAct })}
+              <p style="font-size:13px;color:#64748b;margin-bottom:12px">${t.matrix ? 'Add or edit vendor quotes (AED) in any cell. Tick <strong>Select for Chris</strong> on cells to share. Green = within budget (≤ AED ' + t.budget.max.toLocaleString() + '). Red = over budget.' : 'Click below to create the matrix, then enter quotes from each travel agency.'}</p>
+              ${renderMatrix(t, { editablePrices: canAct })}
               ${canAct && matrixHasQuotes(t) ? `<div class="action-bar">
                 <button class="btn btn-success" onclick="agentConfirmTraveler('${t.id}')" ${!withinAll ? 'disabled title="Selections exceed budget"' : ''}>✓ Confirm & Share with Traveler</button>
                 <button class="btn btn-warning" onclick="agentShareWithChris('${t.id}')">Share Selected with Chris</button>
