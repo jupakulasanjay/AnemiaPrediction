@@ -106,7 +106,10 @@ tr:hover td { background: #fafbfc; }
 .matrix-cell.within-budget { }
 .matrix-cell.over-budget .price { color: var(--red); }
 .matrix-cell.within-budget .price { color: var(--green); }
-.matrix-cell input[type=checkbox] { width: 16px; height: 16px; margin-bottom: 4px; cursor: pointer; }
+.matrix-cell.chris-selected { outline: 2px solid var(--blue); background: #eff6ff; }
+.matrix-cell.chris-selected.over-budget { background: #fef2f2; outline-color: var(--red); }
+.matrix-cell.chris-empty { background: #f8fafc; }
+.matrix-cell .budget-tag { display: block; margin-top: 6px; }
 .matrix-price-input { width: 96px; padding: 8px 6px; text-align: center; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; font-weight: 600; }
 .matrix-cell.empty-cell { background: #fafafa; }
 .matrix-add-panel { text-align: center; padding: 32px 24px; background: var(--grey-light); border-radius: 8px; border: 2px dashed var(--border); }
