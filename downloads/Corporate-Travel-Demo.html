@@ -151,14 +151,6 @@ tr:hover td { background: #fafbfc; }
 .empty-state { text-align: center; padding: 48px 24px; color: var(--grey); }
 
 /* Chris — selected options only */
-.chris-options { display: grid; gap: 12px; }
-.chris-option-card { display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: center; padding: 16px 18px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; }
-.chris-option-card.over { background: #fef2f2; border-color: #fecaca; }
-.chris-option-card .flight-name { font-size: 16px; font-weight: 700; color: var(--navy); }
-.chris-option-card .flight-time { font-size: 12px; color: var(--grey); margin-top: 2px; }
-.chris-option-card .meta-line { font-size: 13px; color: #475569; margin-top: 6px; }
-.chris-option-card .price-block { text-align: right; }
-.chris-option-card .price-block .amount { font-size: 20px; font-weight: 700; color: var(--navy); }
 </style>
 </head>
 <body>
@@ -574,27 +566,44 @@ function getSelectedOptions(ticket) {
 }
 
 function renderChrisSelectedOptions(ticket) {
+  if (!ticket.matrix) {
+    return '<p class="empty-state">Agent has not shared any selected options for your review yet.</p>';
+  }
   const selections = getSelectedOptions(ticket);
   if (!selections.length) {
     return '<p class="empty-state">Agent has not shared any selected options for your review yet.</p>';
   }
-  let html = '<div class="chris-options">';
-  selections.forEach(s => {
-    const within = isWithinBudget(s.price, ticket);
-    html += `<div class="chris-option-card ${within ? '' : 'over'}">
-      <div>
-        <div class="flight-name">${s.flight?.name || s.flightId}</div>
-        <div class="flight-time">${s.flight?.time || ''}</div>
-        <div class="meta-line"><strong>${s.agency}</strong> · ${s.cell.airline} · ${s.cell.route}</div>
-      </div>
-      <div class="price-block">
-        <div class="amount">AED ${s.price.toLocaleString()}</div>
-        ${within ? '<span class="badge badge-approved">Within budget</span>' : '<span class="badge badge-pending-chris">Over budget</span>'}
-      </div>
-    </div>`;
+  const selectedFlights = FLIGHTS.filter(f =>
+    AGENCIES.some(ag => ticket.selectedCells[ag]?.includes(f.id))
+  );
+  let html = '<div class="matrix-wrap"><table class="matrix-table"><thead><tr><th>Travel Agency</th>';
+  selectedFlights.forEach(f => {
+    html += `<th class="flight-col">${f.name}<br><small>${f.time}</small></th>`;
   });
-  html += '</div>';
-  html += `<p style="font-size:12px;color:#64748b;margin-top:12px">Showing ${selections.length} agent-selected option${selections.length === 1 ? '' : 's'} only. Full vendor price matrix is not visible to approvers.</p>`;
+  html += '</tr></thead><tbody>';
+  AGENCIES.forEach(ag => {
+    const rowHasSelection = selectedFlights.some(f => ticket.selectedCells[ag]?.includes(f.id));
+    if (!rowHasSelection) return;
+    html += `<tr><td class="agency-name">${ag}</td>`;
+    selectedFlights.forEach(f => {
+      const sel = ticket.selectedCells[ag]?.includes(f.id);
+      if (!sel) {
+        html += '<td class="matrix-cell chris-empty"><div class="price" style="color:#94a3b8">—</div></td>';
+        return;
+      }
+      const cell = ticket.matrix[ag][f.id];
+      const within = isWithinBudget(cell.price, ticket);
+      const cls = `matrix-cell chris-selected ${within ? 'within-budget' : 'over-budget'}`;
+      html += `<td class="${cls}">
+        <div class="price">AED ${cell.price.toLocaleString()}</div>
+        <div class="airline">${cell.airline}</div>
+        <span class="budget-tag">${within ? '<span class="badge badge-approved">Within budget</span>' : '<span class="badge badge-pending-chris">Over budget</span>'}</span>
+      </td>`;
+    });
+    html += '</tr>';
+  });
+  html += '</tbody></table></div>';
+  html += `<p style="font-size:12px;color:#64748b;margin-top:12px">Agency × Flight matrix — agent-selected cells only. Full vendor quotes are not shown.</p>`;
   return html;
 }
 
@@ -873,7 +882,7 @@ function renderChris(main) {
             <div class="meta-item"><div class="k">Visa Required</div><div class="v">${t.trip.visa ? 'Yes' : 'No'}</div></div>
             <div class="meta-item"><div class="k">Travel Class</div><div class="v">${t.trip.travelClass}</div></div>
           </div>
-          <h3 style="margin-bottom:12px">Agent-Selected Options for Approval</h3>
+          <h3 style="margin-bottom:12px">Agency × Flight — Agent-Selected Options</h3>
           ${renderChrisSelectedOptions(t)}
           <h3 style="margin:24px 0 12px">Governance Checks</h3>
           <div class="gov-list">${renderGovernance(t, false)}</div>
